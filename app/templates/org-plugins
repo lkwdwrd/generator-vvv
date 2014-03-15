@@ -1,0 +1,8 @@
+# List out any plugins in the WordPress.org repository and they will be installed.
+# Each line should contain a plugin slug for wp-cli
+#
+# For example, uncomment the lines below to get lots of debug bar goodies in your project.
+# debug-bar
+# debug-bar-console
+# debug-bar-cron
+# debug-bar-extender

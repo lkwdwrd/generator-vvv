@@ -1,0 +1,38 @@
+{
+  "name": "generator-vvv",
+  "version": "0.0.0",
+  "description": "Yeoman generator",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": "lkwdwrd/generator-vvv",
+  "author": {
+    "name": "Luke Woodward",
+    "email": "woodward.lucas@gmail.com",
+    "url": "https://github.com/lkwdwrd"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator",
+    "vvv",
+    "vagrant",
+    "WordPress"
+  ],
+  "dependencies": {
+    "yeoman-generator": "~0.16.0",
+    "chalk": "~0.4.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  }
+}
