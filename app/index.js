@@ -17,11 +17,8 @@ var VVVGenerator = yeoman.generators.Base.extend({
   },
 
   welcome: function () {
-    // have Yeoman greet the user
-    this.log(this.yeoman);
-
     // replace it with a short and sweet description of your generator
-    this.log(chalk.magenta('You\'re generating site setups for VVV!'));
+    this.log(chalk.magenta('Thanks for generating auto site setups with yo vvv!'));
   },
 
   getSiteInfo: function () {
@@ -109,16 +106,18 @@ var VVVGenerator = yeoman.generators.Base.extend({
       done();
     }.bind(this));
   },
-
+  projectDir: function () {
+    this.mkdir(this.site.url);
+  },
   config: function () {
-    this.mkdir('config');
+    this.mkdir(this.site.url + path.sep + 'config');
 
-    this.copy('org-plugins',  'config/org-plugins');
-    this.copy('wp-constants', 'config/wp-constants');
-    this.template('_wp-ms-constants', 'config/wp-ms-constants');
-    this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
-    this.template('_site-vars.sh', 'config/site-vars.sh');
-    this.template('_vvv-hosts', 'config/vvv-hosts');
+    this.copy('org-plugins', this.site.url + path.sep + 'config/org-plugins');
+    this.copy('wp-constants', this.site.url + path.sep + 'config/wp-constants');
+    this.template('_wp-ms-constants', this.site.url + path.sep + 'config/wp-ms-constants');
+    this.template('_vvv-nginx.conf', this.site.url + path.sep + 'vvv-nginx.conf');
+    this.template('_site-vars.sh', this.site.url + path.sep + 'config/site-vars.sh');
+    this.template('_vvv-hosts', this.site.url + path.sep + 'config/vvv-hosts');
   },
 
   src: function () {
@@ -128,16 +127,16 @@ var VVVGenerator = yeoman.generators.Base.extend({
     this.mkdir('src/plugins');
     this.mkdir('src/themes');
 
-    this.template('readmes/_readme.md', 'readme.md');
-    this.copy('readmes/data-readme.md', 'src/data/readme.md');
-    this.copy('readmes/dropins-readme.md', 'src/dropins/readme.md');
-    this.copy('readmes/plugins-readme.md', 'src/plugins/readme.md');
-    this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
+    this.template('readmes/_readme.md', this.site.url + path.sep + 'readme.md');
+    this.copy('readmes/data-readme.md', this.site.url + path.sep + 'src/data/readme.md');
+    this.copy('readmes/dropins-readme.md', this.site.url + path.sep + 'src/dropins/readme.md');
+    this.copy('readmes/plugins-readme.md', this.site.url + path.sep + 'src/plugins/readme.md');
+    this.copy('readmes/themes-readme.md', this.site.url + path.sep + 'src/themes/readme.md');
   },
 
   setup: function () {
-    this.copy('_package.json', 'package.json');
-    this.copy('vvv-init.sh', 'vvv-init.sh');
+    this.copy('_package.json', this.site.url + path.sep + 'package.json');
+    this.copy('vvv-init.sh', this.site.url + path.sep + 'vvv-init.sh');
   }
 });
 
