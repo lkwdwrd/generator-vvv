@@ -1,6 +1,4 @@
 'use strict';
-var util = require('util');
-var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
@@ -19,6 +17,9 @@ var VVVGenerator = yeoman.generators.Base.extend({
   welcome: function () {
     // replace it with a short and sweet description of your generator
     this.log(chalk.magenta('Thanks for generating auto site setups with yo vvv!'));
+    this.repos = { theme: [], plugin: [] };
+    this.subdomains = [];
+    this.plugins = [];
   },
 
   getSiteInfo: function () {
@@ -28,7 +29,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
       {
         name:    'siteName',
         message: 'What will your site be called?',
-        default: 'Wondering Geniuses'
+        default: 'The WordPress Genius'
       },
       {
         name:    'siteUrl',
@@ -44,6 +45,13 @@ var VVVGenerator = yeoman.generators.Base.extend({
         name:    'multisite',
         message: 'Will this be a network install?',
         default: false
+      },
+      {
+        when: function (props) { return props.multisite; },
+        type:    'confirm',
+        name:    'subdomain',
+        message: 'Is this a subdomain install?',
+        default: false
       }
     ];
     // gather initial settings
@@ -52,91 +60,111 @@ var VVVGenerator = yeoman.generators.Base.extend({
         name:      props.siteName,
         url:       props.siteUrl,
         liveUrl:   props.liveUrl,
-        multisite: props.multisite
+        multisite: props.multisite,
+        subdomain: props.subdomain,
+        id:        props.siteUrl.replace(/[^A-Za-z0-9]/g, '').substr(0, 64)
       };
       done();
     }.bind(this));
   },
 
-  checkMultisite: function () {
-    // if multisite, what kind?
-    if (this.site.multisite) {
-      var done = this.async();
+  promptSubdomains: function (done) {
+    done = done || this.async();
+    // See if we need to add subdomains to this install.
+    if (this.site.multisite && this.site.subdomain) {
       var prompts = [{
-        type:    'confirm',
-        name:    'sudomain',
-        message: 'Is this a sudomain install?',
-        default: false
+        name:    'subdomain',
+        message: 'Add a subdomain (blank to continue)'
       }];
       this.prompt(prompts, function (props) {
-        this.site.sudomain = props.sudomain;
-        done();
+        if (!! props.subdomain) {
+          this.subdomains.push(props.subdomain);
+          this.promptSubdomains(done);
+        } else {
+          done();
+        }
       }.bind(this));
+    } else {
+      done();
     }
   },
 
-  getDBInfo: function () {
-    var done = this.async();
-
-    var prompts = [
-      {
-        name:    'dbName',
-        message: 'What should I call the database?',
-        default: 'genius_db'
-      },
-      {
-        name:    'dbUser',
-        message: 'Who is the user for this database?',
-        default: 'genius_db_user'
-      },
-      {
-        name:    'dbPass',
-        message: 'What will the database user\'s password be?',
-        default: 'genius_db_pass'
-      }
-    ];
-
+  promptPlugins: function (done) {
+    done = done || this.async();
+    // See if we need to add subdomains to this install.
+    var prompts = [{
+      name:    'plugin',
+      message: 'Add a plugin (blank to continue)'
+    }];
     this.prompt(prompts, function (props) {
-      this.db = {
-        name: props.dbName,
-        user: props.dbUser,
-        pass: props.dbPass
-      };
-
-      done();
+      if (!! props.subdomain) {
+        this.plugins.push(props.plugin);
+        this.promptPlugins(done);
+      } else {
+        done();
+      }
     }.bind(this));
   },
+
+  haveRepos: function (done) {
+    // Do we need to import any theme or plugin repos?
+    done = done || this.async();
+
+    var prompts = [{
+      type:    'list',
+      name:    'repoType',
+      message: 'Do you want to add an external repo?',
+      choices: [ 'no', 'plugin', 'theme' ]
+    }, {
+      when: function (props) { return ('no' !== props.repoType); },
+      name: 'repo',
+      message: 'What\'s the URL to the repo?'
+    }];
+
+    this.prompt(prompts, function (props) {
+      if ('no' !== props.repoType) {
+        this.repos[props.repoType].push(props.repo);
+        this.haveRepos(done);
+      } else {
+        done();
+      }
+    }.bind(this));
+  },
+
   projectDir: function () {
     this.mkdir(this.site.url);
+    process.chdir(this.site.url);
   },
-  config: function () {
-    this.mkdir(this.site.url + path.sep + 'config');
 
-    this.copy('org-plugins', this.site.url + path.sep + 'config/org-plugins');
-    this.copy('wp-constants', this.site.url + path.sep + 'config/wp-constants');
-    this.template('_wp-ms-constants', this.site.url + path.sep + 'config/wp-ms-constants');
-    this.template('_vvv-nginx.conf', this.site.url + path.sep + 'vvv-nginx.conf');
-    this.template('_site-vars.sh', this.site.url + path.sep + 'config/site-vars.sh');
-    this.template('_vvv-hosts', this.site.url + path.sep + 'config/vvv-hosts');
+  config: function () {
+    this.mkdir('config');
+
+    this.mkdir('config/data');
+    this.copy('readmes/data-readme.md', 'config/data/readme.md');
+    this.copy('wp-constants', 'config/wp-constants');
+    this.template('_org-plugins', 'config/org-plugins');
+    this.template('_wp-ms-constants', 'config/wp-ms-constants');
+    this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
+    this.template('_site-vars.sh', 'config/site-vars.sh');
+    this.template('_vvv-hosts', 'config/vvv-hosts');
   },
 
   src: function () {
     this.mkdir('src');
-    this.mkdir('src/data');
     this.mkdir('src/dropins');
     this.mkdir('src/plugins');
     this.mkdir('src/themes');
 
-    this.template('readmes/_readme.md', this.site.url + path.sep + 'readme.md');
-    this.copy('readmes/data-readme.md', this.site.url + path.sep + 'src/data/readme.md');
-    this.copy('readmes/dropins-readme.md', this.site.url + path.sep + 'src/dropins/readme.md');
-    this.copy('readmes/plugins-readme.md', this.site.url + path.sep + 'src/plugins/readme.md');
-    this.copy('readmes/themes-readme.md', this.site.url + path.sep + 'src/themes/readme.md');
+    this.template('readmes/_readme.md', 'readme.md');
+    this.copy('readmes/dropins-readme.md', 'src/dropins/readme.md');
+    this.copy('readmes/plugins-readme.md', 'src/plugins/readme.md');
+    this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
   },
 
   setup: function () {
-    this.copy('_package.json', this.site.url + path.sep + 'package.json');
-    this.copy('vvv-init.sh', this.site.url + path.sep + 'vvv-init.sh');
+    this.copy('_package.json', 'package.json');
+    this.copy('vvv-init.sh', 'vvv-init.sh');
+    this.template('_Gruntfile.js', 'Gruntfile.js');
   }
 });
 

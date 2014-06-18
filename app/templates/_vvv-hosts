@@ -3,4 +3,8 @@
 # Place any domains you would like mapped here, one domain to a line.
 # Don't forget to also update vvv-niginx.conf in the root directory
 # to match the hosts designated here.
-<%= site.url %>
+<%= site.url %><%
+var i, length;
+for( i = 0, length = subdomains.length; i < length; i++ ) { %>
+<%= subdomains[i] %>.<%= site.url %><%
+} %>

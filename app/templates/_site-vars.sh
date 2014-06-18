@@ -15,7 +15,12 @@ subdomain='<% if ( site.subdomain ) { print("yes"); } else { print("no"); } %>'
 multisite='no'
 <% } %>
 
+# Set live domain to trigger search-replace functionality
+<% if ( site.liveUrl ) { %>
+live_domain='<%= site.liveUrl %>'
+<% } else { %>
+# live_domain=
+<% } %>
+
 # This sets up the name of the DB and the user and password for the DB.
-database='<%= db.name %>'
-dbuser='<%= db.user %>'
-dbpass='<%= db.pass %>'
+siteId='<%= site.id %>'

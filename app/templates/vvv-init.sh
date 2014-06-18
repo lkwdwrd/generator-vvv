@@ -2,36 +2,44 @@
 source config/site-vars.sh
 echo "Commencing $site_name Site Setup"
 
+# Save a site referece where we can get to it.
+ if [[ ! -d /var/sites ]]
+ 	then
+ 	mkdir sites
+ fi
+ ln -s $PWD /var/sites/$siteId
+
 # Make a database, if we don't already have one
-echo "Creating $site_name database (if it's not already there)"
-mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $database"
-mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $database.* TO $dbuser@localhost IDENTIFIED BY '$dbpass';"
+echo "Checking $site_name database."
+mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $siteId"
+mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $siteId.* TO wordpress@localhost IDENTIFIED BY 'wordpress';"
 
 # Deal with our database dumps.
-first_sql=$(ls src/data | grep -i -E '\.sql$' | head -1)
-if [[ ! -z "$first_sql" ]] && [[ -f src/data/$first_sql ]]
+first_sql=$(ls config/data | grep -i -E '\.sql$' | head -1)
+if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
-	echo "First SQL is present and there is a file..right?"
+	echo "Locating the first present SQL file."
 	echo "$first_sql"
 else
-	echo "First SQL is not present, shouldn't be set at all"
+	echo "First SQL is not present, skipping import."
 fi
-if [[ ! -z "$first_sql" ]] && [[ -f src/data/$first_sql ]]
+if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
 	echo "Importing first found database for $site_name (this can take a while)"
-	mysql -u root --password=root $database < src/data/$first_sql
-	mv src/data/$first_sql src/data/$first_sql.imported
-	if [[ -d htdocs ]]
+	mysql -u root --password=root $siteId < config/data/$first_sql
+	mv config/data/$first_sql config/data/$first_sql.imported
+	if [[ -d htdocs ]] && [[ ! -z $live_domain ]]
 		then
 		cd htdocs
 		# Use the simpler single site setup for all find replace operations.
 		mv wp-config.php wp-config.php.old
-		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$database" --dbuser="$dbuser" --dbpass="$dbpass" --extra-php
-		wp --allow-root search-replace "$old_domain" "$new_domain" --skip-columns=guid
+		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
+		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
 		rm wp-config.php
 		mv wp-config.php.old wp-config.php
 		cd ../
-	else
+	elif [[ ! -d htdocs ]]
+		then
 		sql_imported="yes"
 	fi
 fi
@@ -50,7 +58,7 @@ if [[ ! -d htdocs ]]
 	# Move into htdocs to run 'wp' commands.
 	cd htdocs
 	wp --allow-root core download
-	echo "$constants" | wp --allow-root core config --dbname="$database" --dbuser="$dbuser" --dbpass="$dbpass" --extra-php
+	echo "$constants" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
 	#Install as needed
 	if ! $(wp --allow-root core is-installed)
 		then
@@ -67,13 +75,13 @@ if [[ ! -d htdocs ]]
 			wp --allow-root core multisite-convert --title="$site_name"
 		fi
 	fi
-	# Update Database as Needed
+	# Update Database as Needed - already checked for $live_domain
 	if [[ "$sql_imported" == "yes" ]]
 		then
 		# Make sure we're using a single site config file to ensure search-replace works.
 		mv wp-config.php wp-config.php.old
-		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$database" --dbuser="$dbuser" --dbpass="$dbpass" --extra-php
-		wp --allow-root search-replace "$old_domain" "$new_domain" --skip-columns=guid
+		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
+		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
 		rm wp-config.php
 		mv wp-config.php.old wp-config.php
 	fi
@@ -99,7 +107,7 @@ then
 	cd htdocs
 	while IFS='' read -r line || [ -n "$line" ]
 	do
-		if [ "#" != "${line:0:1}" ]
+		if [ "#" != "${line:0:1}" ] && [[ ! -z $line ]]
 		then
 			# Only install the plugin if it's not already installed.
 			if ! $(wp --allow-root plugin is-installed $line )
