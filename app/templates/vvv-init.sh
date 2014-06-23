@@ -5,7 +5,7 @@ echo "Commencing $site_name Site Setup"
 # Save a site referece where we can get to it.
  if [[ ! -d /var/sites ]]
  	then
- 	mkdir sites
+ 	mkdir /var/sites
  fi
  ln -s $PWD /var/sites/$siteId
 
