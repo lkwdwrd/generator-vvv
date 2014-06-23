@@ -24,3 +24,6 @@ live_domain='<%= site.liveUrl %>'
 
 # This sets up the name of the DB and the user and password for the DB.
 siteId='<%= site.id %>'
+
+# Set the version of WordPress to install
+wordpressVersion='<%= site.wpversion %>'
