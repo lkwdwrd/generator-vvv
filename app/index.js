@@ -37,6 +37,11 @@ var VVVGenerator = yeoman.generators.Base.extend({
         default: 'genius.dev'
       },
       {
+        name:    'wordpressVersion',
+        message: 'What version of WordPress would you like to install?',
+        default: 'latest'
+      },
+      {
         name:    'liveUrl',
         message: 'What is the live domian? (genius.com - blank if none)'
       },
@@ -58,6 +63,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
     this.prompt(prompts, function (props) {
       this.site = {
         name:      props.siteName,
+        wpversion: props.wordpressVersion,
         url:       props.siteUrl,
         liveUrl:   props.liveUrl,
         multisite: props.multisite,
