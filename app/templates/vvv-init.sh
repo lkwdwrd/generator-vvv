@@ -5,7 +5,7 @@ echo "Commencing $site_name Site Setup"
 # Save a site referece where we can get to it.
  if [[ ! -d /var/sites ]]
  	then
- 	mkdir sites
+ 	mkdir /var/sites
  fi
  ln -s $PWD /var/sites/$siteId
 
@@ -58,7 +58,7 @@ if [[ ! -d htdocs ]]
 	fi
 	# Move into htdocs to run 'wp' commands.
 	cd htdocs
-	wp --allow-root core download
+	wp --allow-root core download --version="$wordpressVersion"
 	echo "$constants" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
 	#Install as needed
 	if ! $(wp --allow-root core is-installed)
