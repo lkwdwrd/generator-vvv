@@ -25,15 +25,16 @@ else
 fi
 if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
-	echo "Importing first found database for $site_name (this can take a while)"
+	echo "Importing first found database for $site_name."
 	mysql -u root --password=root $siteId < config/data/$first_sql
 	mv config/data/$first_sql config/data/$first_sql.imported
 	if [[ -d htdocs ]] && [[ ! -z $live_domain ]]
 		then
+		echo "Updating $site_name domains (this can take a while)."
 		cd htdocs
 		# Use the simpler single site setup for all find replace operations.
 		mv wp-config.php wp-config.php.old
-		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
+		echo "$(cat ../config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
 		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
 		rm wp-config.php
 		mv wp-config.php.old wp-config.php
@@ -62,7 +63,7 @@ if [[ ! -d htdocs ]]
 	#Install as needed
 	if ! $(wp --allow-root core is-installed)
 		then
-		wp --allow-root core install --url="$domain" --title="$site_name" --admin_user="$admin_user" --admin_password="$admin_pass" --admin_email="$admin_email"
+		wp --allow-root core install --url="http://$domain" --title="$site_name" --admin_user="$admin_user" --admin_password="$admin_pass" --admin_email="$admin_email"
 	fi
 	#Multisite stuff
 	if [[ "$multisite" == "yes" ]] && [[ "$sql_imported" != "yes" ]]
@@ -78,9 +79,10 @@ if [[ ! -d htdocs ]]
 	# Update Database as Needed - already checked for $live_domain
 	if [[ "$sql_imported" == "yes" ]]
 		then
+		echo "Updating $site_name domains (this can take a while)."
 		# Make sure we're using a single site config file to ensure search-replace works.
 		mv wp-config.php wp-config.php.old
-		echo "$(cat config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
+		echo "$(cat ../config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
 		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
 		rm wp-config.php
 		mv wp-config.php.old wp-config.php
@@ -107,12 +109,14 @@ then
 	cd htdocs
 	while IFS='' read -r line || [ -n "$line" ]
 	do
-		if [ "#" != "${line:0:1}" ] && [[ ! -z $line ]]
+		if [ "#" != "${line:0:1}" ]
 		then
 			# Only install the plugin if it's not already installed.
-			if ! $(wp --allow-root plugin is-installed $line )
+			if ! $(wp --allow-root plugin is-installed "$line")
 				then
-				wp plugin install $line --allow-root
+				wp --allow-root plugin install "$line" --allow-root
+			else
+				echo $line;
 			fi
 		fi
 	done < ../config/org-plugins

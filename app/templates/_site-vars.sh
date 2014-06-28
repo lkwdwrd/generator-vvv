@@ -4,7 +4,7 @@
 site_name='<%= site.name %>'
 
 # The site details
-domain='http://<%= site.url %>'
+domain='<%= site.url %>'
 admin_user='wordpress'
 admin_pass='wordpress'
 admin_email='wordpress@<%= site.url %>'

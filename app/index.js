@@ -97,7 +97,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
       message: 'Add a plugin (blank to continue)'
     }];
     this.prompt(prompts, function (props) {
-      if (!! props.subdomain) {
+      if (!! props.plugin) {
         this.plugins.push(props.plugin);
         this.promptPlugins(done);
       } else {

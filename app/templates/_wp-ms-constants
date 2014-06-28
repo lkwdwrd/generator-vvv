@@ -3,7 +3,7 @@
 define('MULTISITE', true);
 define('SUBDOMAIN_INSTALL', <% if ( site.subdomain ) { print("true"); } else { print("false"); } %>);
 $base = '/';
-define('DOMAIN_CURRENT_SITE', 'genius.dev');
+define('DOMAIN_CURRENT_SITE', '<%= site.url %>');
 define('PATH_CURRENT_SITE', '/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
