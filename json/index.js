@@ -6,7 +6,7 @@ var prompts = require('../prompts/prompts.js');
 var output = require('../output/output.js');
 
 
-var VVVGenerator = yeoman.generators.Base.extend({
+var JSONGenerator = yeoman.generators.Base.extend({
   constructor: function () {
     yeoman.generators.Base.apply(this, arguments);
     var dirPath = '../templates';
@@ -33,11 +33,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
   promptPlugins: prompts.promptPlugins,
   haveRepos: prompts.haveRepos,
   // output
-  projectDir: output.projectDir,
-  vvv: output.vvv,
-  config: output.config,
-  src: output.src,
-  setup: output.setup
+  vvv: output.vvv
 });
 
-module.exports = VVVGenerator;
+module.exports = JSONGenerator;
