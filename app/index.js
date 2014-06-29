@@ -35,6 +35,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
   haveRepos: prompts.haveRepos,
   // output
   projectDir: output.projectDir,
+  vvv: output.vvv,
   config: output.config,
   src: output.src,
   setup: output.setup

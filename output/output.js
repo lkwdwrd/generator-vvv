@@ -5,6 +5,10 @@ function projectDir() {
   process.chdir(this.site.url);
 }
 
+function vvv() {
+  this.template('_vvv.json', 'vvv.json');
+}
+
 function config() {
   this.mkdir('config');
 
@@ -38,6 +42,7 @@ function setup() {
 
 module.exports = {
   projectDir: projectDir,
+  vvv: vvv,
   config: config,
   src: src,
   setup: setup
