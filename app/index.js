@@ -1,10 +1,19 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
+var path = require('path');
+var prompts = require('../prompts/prompts.js');
+var output = require('../output/output.js');
 
 
 var VVVGenerator = yeoman.generators.Base.extend({
+  constructor: function () {
+    yeoman.generators.Base.apply(this, arguments);
+    var dirPath = '../templates';
+    this.sourceRoot(path.join(__dirname, dirPath));
+  },
   init: function () {
+    this.resolved = path.dirname(path.dirname(this.resolved));
     this.pkg = require('../package.json');
 
     this.on('end', function () {
@@ -13,181 +22,22 @@ var VVVGenerator = yeoman.generators.Base.extend({
       }
     });
   },
-
   welcome: function () {
     // replace it with a short and sweet description of your generator
     this.log(chalk.magenta('Thanks for generating auto site setups with yo vvv!'));
   },
-
-  getSiteInfo: function () {
-    var done = this.async();
-
-    var prompts = [
-      {
-        name:    'siteName',
-        message: 'What will your site be called?',
-        default: 'The WordPress Genius'
-      },
-      {
-        name:    'siteUrl',
-        message: 'What would you like your domain to be?',
-        default: 'genius.dev'
-      },
-      {
-        name:    'liveUrl',
-        message: 'What is the live domian? (genius.com - blank if none)'
-      }
-    ];
-    // gather initial settings
-    this.prompt(prompts, function (props) {
-      this.site = {
-        name:      props.siteName,
-        url:       props.siteUrl,
-        liveUrl:   props.liveUrl,
-      };
-      done();
-    }.bind(this));
-  },
-
-  generateSiteId: function () {
-    this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
-  },
-
-  getWPInfo: function () {
-    var done = this.async();
-
-    var prompts = [
-      {
-        name:    'version',
-        message: 'What version of WordPress would you like to install?',
-        default: 'latest'
-      },
-      {
-        type:    'confirm',
-        name:    'multisite',
-        message: 'Will this be a network install?',
-        default: false
-      },
-      {
-        when: function (props) { return props.multisite; },
-        type:    'confirm',
-        name:    'subdomain',
-        message: 'Is this a subdomain install?',
-        default: false
-      }
-    ];
-    // gather initial settings
-    this.prompt(prompts, function (props) {
-      this.wordpress = {
-        version: props.version,
-        multisite: props.multisite,
-        subdomain: props.subdomain,
-        subdomains: []
-      };
-      done();
-    }.bind(this));
-  },
-
-  promptSubdomains: function (done) {
-    done = done || this.async();
-    // See if we need to add subdomains to this install.
-    if (this.wordpress.multisite && this.wordpress.subdomain) {
-      var prompts = [{
-        name:    'subdomain',
-        message: 'Add a subdomain (blank to continue)'
-      }];
-      this.prompt(prompts, function (props) {
-        if (!! props.subdomain) {
-          this.wordpress.subdomains.push(props.subdomain);
-          this.promptSubdomains(done);
-        } else {
-          done();
-        }
-      }.bind(this));
-    } else {
-      done();
-    }
-  },
-
-  promptPlugins: function (done) {
-    done = done || this.async();
-    this.plugins = this.plugins || [];
-    // See if we need to add subdomains to this install.
-    var prompts = [{
-      name:    'plugin',
-      message: 'Add a plugin (blank to continue)'
-    }];
-    this.prompt(prompts, function (props) {
-      if (!! props.plugin) {
-        this.plugins.push(props.plugin);
-        this.promptPlugins(done);
-      } else {
-        done();
-      }
-    }.bind(this));
-  },
-
-  haveRepos: function (done) {
-    // Do we need to import any theme or plugin repos?
-    done = done || this.async();
-    this.repos = this.repos || { theme: [], plugin: [] };
-
-    var prompts = [{
-      type:    'list',
-      name:    'repoType',
-      message: 'Do you want to add an external repo?',
-      choices: [ 'no', 'plugin', 'theme' ]
-    }, {
-      when: function (props) { return ('no' !== props.repoType); },
-      name: 'repo',
-      message: 'What\'s the URL to the repo?'
-    }];
-
-    this.prompt(prompts, function (props) {
-      if ('no' !== props.repoType) {
-        this.repos[props.repoType].push(props.repo);
-        this.haveRepos(done);
-      } else {
-        done();
-      }
-    }.bind(this));
-  },
-
-  projectDir: function () {
-    this.mkdir(this.site.url);
-    process.chdir(this.site.url);
-  },
-
-  config: function () {
-    this.mkdir('config');
-
-    this.mkdir('config/data');
-    this.copy('readmes/data-readme.md', 'config/data/readme.md');
-    this.copy('wp-constants', 'config/wp-constants');
-    this.template('_org-plugins', 'config/org-plugins');
-    this.template('_wp-ms-constants', 'config/wp-ms-constants');
-    this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
-    this.template('_site-vars.sh', 'config/site-vars.sh');
-    this.template('_vvv-hosts', 'config/vvv-hosts');
-  },
-
-  src: function () {
-    this.mkdir('src');
-    this.mkdir('src/dropins');
-    this.mkdir('src/plugins');
-    this.mkdir('src/themes');
-
-    this.template('readmes/_readme.md', 'readme.md');
-    this.copy('readmes/dropins-readme.md', 'src/dropins/readme.md');
-    this.copy('readmes/plugins-readme.md', 'src/plugins/readme.md');
-    this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
-  },
-
-  setup: function () {
-    this.copy('_package.json', 'package.json');
-    this.copy('vvv-init.sh', 'vvv-init.sh');
-    this.template('_Gruntfile.js', 'Gruntfile.js');
-  }
+  //prompts
+  getSiteInfo: prompts.getSiteInfo,
+  generateSiteId: prompts.generateSiteId,
+  getWPInfo: prompts.getWPInfo,
+  promptSubdomains: prompts.promptSubdomains,
+  promptPlugins: prompts.promptPlugins,
+  haveRepos: prompts.haveRepos,
+  // output
+  projectDir: output.projectDir,
+  config: output.config,
+  src: output.src,
+  setup: output.setup
 });
 
 module.exports = VVVGenerator;
