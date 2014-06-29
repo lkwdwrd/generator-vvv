@@ -21,9 +21,17 @@ var BootstrapVVV = yeoman.generators.Base.extend({
     }
 
     this.on('end', function () {
-      this.log('ended');
       if (!this.options['skip-install']) {
-        this.installDependencies();
+        this.installDependencies(function () {
+          if (!this.options['skip-grunt']) {
+            this.log(chalk.green.bold('Running default grunt task'));
+            this.spawnCommand('grunt', ['default']);
+          } else {
+            this.log(chalk.yellow('skipping grunt. Run grunt manually when you are ready.'));
+          }
+        }.bind(this));
+      } else {
+        this.log(chalk.yellow('skipping install, run npm install and grunt to finish up.'));
       }
     });
   },
