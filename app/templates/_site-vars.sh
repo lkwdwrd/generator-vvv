@@ -8,9 +8,9 @@ domain='<%= site.url %>'
 admin_user='wordpress'
 admin_pass='wordpress'
 admin_email='wordpress@<%= site.url %>'
-<% if ( site.multisite ) { %>
+<% if ( wordpress.multisite ) { %>
 multisite='yes'
-subdomain='<% if ( site.subdomain ) { print("yes"); } else { print("no"); } %>'
+subdomain='<% if ( wordpress.subdomain ) { print("yes"); } else { print("no"); } %>'
 <% } else { %>
 multisite='no'
 <% } %>
@@ -26,4 +26,4 @@ live_domain='<%= site.liveUrl %>'
 siteId='<%= site.id %>'
 
 # Set the version of WordPress to install
-wordpressVersion='<%= site.wpversion %>'
+wordpressVersion='<%= wordpress.version %>'

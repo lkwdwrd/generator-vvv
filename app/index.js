@@ -17,9 +17,6 @@ var VVVGenerator = yeoman.generators.Base.extend({
   welcome: function () {
     // replace it with a short and sweet description of your generator
     this.log(chalk.magenta('Thanks for generating auto site setups with yo vvv!'));
-    this.repos = { theme: [], plugin: [] };
-    this.subdomains = [];
-    this.plugins = [];
   },
 
   getSiteInfo: function () {
@@ -37,13 +34,33 @@ var VVVGenerator = yeoman.generators.Base.extend({
         default: 'genius.dev'
       },
       {
-        name:    'wordpressVersion',
-        message: 'What version of WordPress would you like to install?',
-        default: 'latest'
-      },
-      {
         name:    'liveUrl',
         message: 'What is the live domian? (genius.com - blank if none)'
+      }
+    ];
+    // gather initial settings
+    this.prompt(prompts, function (props) {
+      this.site = {
+        name:      props.siteName,
+        url:       props.siteUrl,
+        liveUrl:   props.liveUrl,
+      };
+      done();
+    }.bind(this));
+  },
+
+  generateSiteId: function () {
+    this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
+  },
+
+  getWPInfo: function () {
+    var done = this.async();
+
+    var prompts = [
+      {
+        name:    'version',
+        message: 'What version of WordPress would you like to install?',
+        default: 'latest'
       },
       {
         type:    'confirm',
@@ -61,14 +78,11 @@ var VVVGenerator = yeoman.generators.Base.extend({
     ];
     // gather initial settings
     this.prompt(prompts, function (props) {
-      this.site = {
-        name:      props.siteName,
-        wpversion: props.wordpressVersion,
-        url:       props.siteUrl,
-        liveUrl:   props.liveUrl,
+      this.wordpress = {
+        version: props.version,
         multisite: props.multisite,
         subdomain: props.subdomain,
-        id:        props.siteUrl.replace(/[^A-Za-z0-9]/g, '').substr(0, 64)
+        subdomains: []
       };
       done();
     }.bind(this));
@@ -77,14 +91,14 @@ var VVVGenerator = yeoman.generators.Base.extend({
   promptSubdomains: function (done) {
     done = done || this.async();
     // See if we need to add subdomains to this install.
-    if (this.site.multisite && this.site.subdomain) {
+    if (this.wordpress.multisite && this.wordpress.subdomain) {
       var prompts = [{
         name:    'subdomain',
         message: 'Add a subdomain (blank to continue)'
       }];
       this.prompt(prompts, function (props) {
         if (!! props.subdomain) {
-          this.subdomains.push(props.subdomain);
+          this.wordpress.subdomains.push(props.subdomain);
           this.promptSubdomains(done);
         } else {
           done();
@@ -97,6 +111,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
 
   promptPlugins: function (done) {
     done = done || this.async();
+    this.plugins = this.plugins || [];
     // See if we need to add subdomains to this install.
     var prompts = [{
       name:    'plugin',
@@ -115,6 +130,7 @@ var VVVGenerator = yeoman.generators.Base.extend({
   haveRepos: function (done) {
     // Do we need to import any theme or plugin repos?
     done = done || this.async();
+    this.repos = this.repos || { theme: [], plugin: [] };
 
     var prompts = [{
       type:    'list',

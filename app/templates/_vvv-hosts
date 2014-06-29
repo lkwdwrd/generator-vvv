@@ -5,6 +5,6 @@
 # to match the hosts designated here.
 <%= site.url %><%
 var i, length;
-for( i = 0, length = subdomains.length; i < length; i++ ) { %>
-<%= subdomains[i] %>.<%= site.url %><%
+for( i = 0, length = wordpress.subdomains.length; i < length; i++ ) { %>
+<%= wordpress.subdomains[i] %>.<%= site.url %><%
 } %>
