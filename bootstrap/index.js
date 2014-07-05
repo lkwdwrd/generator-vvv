@@ -49,11 +49,16 @@ var BootstrapVVV = yeoman.generators.Base.extend({
     this.wordpress = src.wordpress;
     this.repos = src.repos;
     this.plugins = src.plugins;
+    this.dependencies = src.dependencies;
+    this.db = src.db;
   },
   // output
   config: output.config,
+  deps: output.deps,
   src: output.src,
-  setup: output.setup
+  setup: output.setup,
+  findSQL: output.findSQL,
+  sql: output.sql
 });
 
 module.exports = BootstrapVVV;

@@ -30,5 +30,6 @@
 	var i, length;
 	for (i = 0, length = plugins.length; i < length; i++) { %>
 		"<%= plugins[i] %>"<% if((i + 1) !== length) { %>,<% }} %>
-	]
+	],
+	"dependencies": "<%= dependencies %>"
 }

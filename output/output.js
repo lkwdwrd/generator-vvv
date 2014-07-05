@@ -1,5 +1,8 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+
 function projectDir() {
   this.mkdir(this.site.url);
   process.chdir(this.site.url);
@@ -22,6 +25,10 @@ function config() {
   this.template('_vvv-hosts', 'config/vvv-hosts');
 }
 
+function deps() {
+  this.copy('readmes/dependencies-readme.md', 'deps/readme.md');
+}
+
 function src() {
   this.mkdir('src');
   this.mkdir('src/dropins');
@@ -40,10 +47,55 @@ function setup() {
   this.template('_Gruntfile.js', 'Gruntfile.js');
 }
 
+function findSQL() {
+  var i, length,
+      cwd = process.cwd(),
+      reg = /\.sql(?:\.gz)?$/,
+      done = this.async();
+
+  if (this.options.db) {
+    this.db = {
+      'type': 'file',
+      'location': this.options.db
+    };
+  } else if ('object' !== this.db || ('file' === this.db.type && ! this.db.location)) {
+    fs.readdir(cwd, function (err, files) {
+      if (err) {
+        this.log.warn('Directory Error: ' + err);
+        return;
+      }
+      for (i = 0, length = files.length; i < length; i++) {
+        if (-1 !== files[i].search(reg)) {
+          this.db = {
+            'type': 'file',
+            'location': path.join(cwd, files[i])
+          };
+          break;
+        }
+      }
+      done();
+    }.bind(this));
+  }
+}
+
+function sql() {
+  if ('object' !== typeof this.db) {
+    return;
+  }
+
+  if ('file' === this.db.type && this.db.location) {
+    var fname = path.basename(this.db.location);
+    fs.rename(this.db.location, 'config/data/' + fname);
+  }
+}
+
 module.exports = {
   projectDir: projectDir,
   vvv: vvv,
   config: config,
+  deps: deps,
   src: src,
-  setup: setup
+  setup: setup,
+  findSQL: findSQL,
+  sql: sql
 };

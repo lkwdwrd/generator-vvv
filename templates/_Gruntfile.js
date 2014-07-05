@@ -4,7 +4,15 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg:    grunt.file.readJSON('package.json'),
 		gitPull: {
-			themes: {
+			<% if (dependencies) {
+%>			dependencies: {
+				repose: [
+					path: ['deps'],
+					repo: '<%= dependencies %>'
+				]
+			}<% if ( repos ) %>,<% } }
+			if ( repos ) {
+%>			themes: {
 				repos: [
 <%					var i, length;
 					for (i = 0, length = repos.theme.length; i < length; i++) {
@@ -22,7 +30,7 @@ module.exports = function (grunt) {
 						repo: '<%= repos.plugin[i] %>'
 					}<% if((i + 1) !== length) { %>,<% } %>
 <% } %>				]
-			}
+			}<% } %>
 		},
 		vagrant_commands: {
 			restart: {

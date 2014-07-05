@@ -134,11 +134,26 @@ function haveRepos(done) {
   }.bind(this));
 }
 
+function dependencyRepo() {
+  // Do we have a dependency repository?
+  var done = this.async();
+
+  this.prompt([{
+      name:    'dependencies',
+      message: 'Where is the depenency repository?'
+    }], function (props) {
+      this.dependencies = props.dependencies;
+      done();
+    }.bind(this)
+  );
+}
+
 module.exports = {
   getSiteInfo: getSiteInfo,
   generateSiteId: generateSiteId,
   getWPInfo: getWPInfo,
   promptSubdomains: promptSubdomains,
   promptPlugins: promptPlugins,
-  haveRepos: haveRepos
+  haveRepos: haveRepos,
+  dependencyRepo: dependencyRepo
 };

@@ -4,7 +4,8 @@
 # Don't forget to also update vvv-niginx.conf in the root directory
 # to match the hosts designated here.
 <%= site.url %><%
+if ( wordpress.subdomains ) {
 var i, length;
 for( i = 0, length = wordpress.subdomains.length; i < length; i++ ) { %>
 <%= wordpress.subdomains[i] %>.<%= site.url %><%
-} %>
+} }%>

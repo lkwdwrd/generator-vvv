@@ -32,12 +32,15 @@ var VVVGenerator = yeoman.generators.Base.extend({
   promptSubdomains: prompts.promptSubdomains,
   promptPlugins: prompts.promptPlugins,
   haveRepos: prompts.haveRepos,
+  dependencyRepo: prompts.dependencyRepo,
   // output
   projectDir: output.projectDir,
   vvv: output.vvv,
   config: output.config,
+  deps: output.deps,
   src: output.src,
-  setup: output.setup
+  setup: output.setup,
+  sql: output.sql
 });
 
 module.exports = VVVGenerator;

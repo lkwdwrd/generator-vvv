@@ -15,29 +15,36 @@ mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $siteId"
 mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $siteId.* TO wordpress@localhost IDENTIFIED BY 'wordpress';"
 
 # Deal with our database dumps.
-first_sql=$(ls config/data | grep -i -E '\.sql$' | head -1)
+first_sql=$(ls config/data | grep -i -E '\.sql(?:.gz)?$' | head -1)
 if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
-	echo "Locating the first present SQL file."
+	echo "Setting up import of the first found SQL file."
 	echo "$first_sql"
 else
-	echo "First SQL is not present, skipping import."
+	echo "No SQL file present, skipping import."
 fi
 if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
 	echo "Importing first found database for $site_name."
-	mysql -u root --password=root $siteId < config/data/$first_sql
+	if [[ $first_sql =~ \.gz$ ]]
+		then
+		#Deal with gzipped sql files
+		gunzip < config/data/$first_sql | mysql -u root --password=root $siteId
+	else
+		#Deal with normal sql files
+		mysql -u root --password=root $siteId < config/data/$first_sql
+	fi
 	mv config/data/$first_sql config/data/$first_sql.imported
 	if [[ -d htdocs ]] && [[ ! -z $live_domain ]]
 		then
 		echo "Updating $site_name domains (this can take a while)."
 		cd htdocs
-		# Use the simpler single site setup for all find replace operations.
-		mv wp-config.php wp-config.php.old
-		echo "$(cat ../config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
-		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
-		rm wp-config.php
-		mv wp-config.php.old wp-config.php
+		if [[ "$multisite" == "yes" ]]
+			then
+			wp --allow-root --url="$domain" search-replace "$live_domain" "$domain" --skip-columns=guid
+		else
+			wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
+		fi
 		cd ../
 	elif [[ ! -d htdocs ]]
 		then
@@ -80,12 +87,12 @@ if [[ ! -d htdocs ]]
 	if [[ "$sql_imported" == "yes" ]]
 		then
 		echo "Updating $site_name domains (this can take a while)."
-		# Make sure we're using a single site config file to ensure search-replace works.
-		mv wp-config.php wp-config.php.old
-		echo "$(cat ../config/wp-constants)" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
-		wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
-		rm wp-config.php
-		mv wp-config.php.old wp-config.php
+		if [[ "$multisite" == "yes" ]]
+			then
+			wp --allow-root --url="$domain" search-replace "$live_domain" "$domain" --skip-columns=guid
+		else
+			wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
+		fi
 	fi
 	# If this is multisite and we've imported SQL, update the DB.
 	if [[ "$multisite" == "yes" ]] && [[ "$sql_imported" == "yes" ]]
@@ -127,7 +134,25 @@ fi
 # Symlink working directories
 # First clear out any links already present
 find htdocs/wp-content/ -maxdepth 2 -type l -exec rm -f {} \;
-# Next attach symlinks for eacy of our types.
+
+# Then link dependecy Repos
+if [[ -d deps/plguins ]]
+	then
+	echo "Linking plugin dependencies"
+	find deps/plugins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/plugins/ \;
+fi
+if [[ -d deps/themes ]]
+	then
+	echo "Linking themes dependencies"
+	find deps/themes/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/themes/ \;
+fi
+if [[ -d deps/dropins ]]
+	then
+	echo "Linking dropin dependencies"
+	find deps/dropins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/ \;
+fi
+
+# Next attach symlinks for each of our types.
 # Plugins
 echo "Linking working directory pluins"
 find src/plugins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/plugins/ \;

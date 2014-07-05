@@ -14,12 +14,6 @@ var JSONGenerator = yeoman.generators.Base.extend({
   },
   init: function () {
     this.pkg = require('../package.json');
-
-    this.on('end', function () {
-      if (!this.options['skip-install']) {
-        this.installDependencies();
-      }
-    });
   },
   welcome: function () {
     // replace it with a short and sweet description of your generator
@@ -32,6 +26,7 @@ var JSONGenerator = yeoman.generators.Base.extend({
   promptSubdomains: prompts.promptSubdomains,
   promptPlugins: prompts.promptPlugins,
   haveRepos: prompts.haveRepos,
+  dependencyRepo: prompts.dependencyRepo,
   // output
   vvv: output.vvv
 });
