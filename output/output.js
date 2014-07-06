@@ -41,10 +41,19 @@ function src() {
   this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
 }
 
-function setup() {
+function node() {
   this.copy('_package.json', 'package.json');
-  this.copy('vvv-init.sh', 'vvv-init.sh');
   this.template('_Gruntfile.js', 'Gruntfile.js');
+}
+
+function scripts() {
+  this.copy('scripts/clear-links.sh');
+  this.copy('scripts/dependencies.sh');
+  this.copy('scripts/import-sql.sh');
+  this.copy('scripts/plugins.sh');
+  this.copy('scripts/src.sh');
+  this.copy('scripts/update-db.sh');
+  this.copy('vvv-init.sh');
 }
 
 function findSQL() {
@@ -95,7 +104,8 @@ module.exports = {
   config: config,
   deps: deps,
   src: src,
-  setup: setup,
+  node: node,
+  scripts: scripts,
   findSQL: findSQL,
   sql: sql
 };

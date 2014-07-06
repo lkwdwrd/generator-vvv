@@ -14,43 +14,7 @@ echo "Checking $site_name database."
 mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $siteId"
 mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $siteId.* TO wordpress@localhost IDENTIFIED BY 'wordpress';"
 
-# Deal with our database dumps.
-first_sql=$(ls config/data | grep -i -E '\.sql(?:.gz)?$' | head -1)
-if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
-	then
-	echo "Setting up import of the first found SQL file."
-	echo "$first_sql"
-else
-	echo "No SQL file present, skipping import."
-fi
-if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
-	then
-	echo "Importing first found database for $site_name."
-	if [[ $first_sql =~ \.gz$ ]]
-		then
-		#Deal with gzipped sql files
-		gunzip < config/data/$first_sql | mysql -u root --password=root $siteId
-	else
-		#Deal with normal sql files
-		mysql -u root --password=root $siteId < config/data/$first_sql
-	fi
-	mv config/data/$first_sql config/data/$first_sql.imported
-	if [[ -d htdocs ]] && [[ ! -z $live_domain ]]
-		then
-		echo "Updating $site_name domains (this can take a while)."
-		cd htdocs
-		if [[ "$multisite" == "yes" ]]
-			then
-			wp --allow-root --url="$domain" search-replace "$live_domain" "$domain" --skip-columns=guid
-		else
-			wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
-		fi
-		cd ../
-	elif [[ ! -d htdocs ]]
-		then
-		sql_imported="yes"
-	fi
-fi
+sh scripts/import-sql.sh
 # Install WordPress if it's not already present.
 if [[ ! -d htdocs ]]
 	then
@@ -83,85 +47,30 @@ if [[ ! -d htdocs ]]
 			wp --allow-root core multisite-convert --title="$site_name"
 		fi
 	fi
+	cd ..
 	# Update Database as Needed - already checked for $live_domain
 	if [[ "$sql_imported" == "yes" ]]
 		then
-		echo "Updating $site_name domains (this can take a while)."
-		if [[ "$multisite" == "yes" ]]
-			then
-			wp --allow-root --url="$domain" search-replace "$live_domain" "$domain" --skip-columns=guid
-		else
-			wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
-		fi
+		sh scripts/update-db.sh
 	fi
 	# If this is multisite and we've imported SQL, update the DB.
 	if [[ "$multisite" == "yes" ]] && [[ "$sql_imported" == "yes" ]]
 		then
+		cd htdocs
 		# Attempt to update the network sites if we importend it.
 		echo "Updating Network"
 		for url in $(wp --allow-root site list --fields=url --format=csv | tail -n +2)
 		do
 		  wp --url="$url" --allow-root core update-db
 		done
+		cd ..
 	fi
-	# Move back to root to finish up shell commands.
-	cd ..
 fi
 
-#Install all WordPress.org plugins in the org_plugins file using CLI
-echo "Checking for missing WordPress.org Plugins"
-if [[ config/org-plugins ]]
-then
-	# Move back into htdocs to install .org plugins.
-	cd htdocs
-	while IFS='' read -r line || [ -n "$line" ]
-	do
-		if [ "#" != "${line:0:1}" ]
-		then
-			# Only install the plugin if it's not already installed.
-			if ! $(wp --allow-root plugin is-installed "$line")
-				then
-				wp --allow-root plugin install "$line" --allow-root
-			else
-				echo $line;
-			fi
-		fi
-	done < ../config/org-plugins
-	# Move back to the root directory.
-	cd ..
-fi
-
-# Symlink working directories
-# First clear out any links already present
-find htdocs/wp-content/ -maxdepth 2 -type l -exec rm -f {} \;
-
-# Then link dependecy Repos
-if [[ -d deps/plguins ]]
-	then
-	echo "Linking plugin dependencies"
-	find deps/plugins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/plugins/ \;
-fi
-if [[ -d deps/themes ]]
-	then
-	echo "Linking themes dependencies"
-	find deps/themes/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/themes/ \;
-fi
-if [[ -d deps/dropins ]]
-	then
-	echo "Linking dropin dependencies"
-	find deps/dropins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/ \;
-fi
-
-# Next attach symlinks for each of our types.
-# Plugins
-echo "Linking working directory pluins"
-find src/plugins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/plugins/ \;
-# Themes
-echo "Linking working directory themes"
-find src/themes/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/themes/ \;
-# Dropins
-echo "Linking any available drop-ins"
-find src/dropins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/ \;
+sh scripts/plugins.sh
+sh scripts/clear-links.sh
+sh scripts/dependencies.sh
+sh scripts/src.sh
 
 # The Vagrant site setup script will restart Nginx for us
 echo "$site_name is now set up!";

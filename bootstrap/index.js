@@ -56,7 +56,8 @@ var BootstrapVVV = yeoman.generators.Base.extend({
   config: output.config,
   deps: output.deps,
   src: output.src,
-  setup: output.setup,
+  node: output.node,
+  scripts: output.scripts,
   findSQL: output.findSQL,
   sql: output.sql
 });
