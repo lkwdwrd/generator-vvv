@@ -43,7 +43,24 @@ module.exports = function (grunt) {
 					['halt'],
 					['up', '--provision']
 				]
+			}
+			import_db: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/import-sql.sh']
+				]
 			},
+			install_plugins: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/plugins.sh']
+				]
+			},
+			symlinks: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/clear-links.sh'],
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/dependencies.sh'],
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/src.sh']
+				]
+			}
 		}
 	});
 
@@ -53,6 +70,9 @@ module.exports = function (grunt) {
 	// Register tasks
 	grunt.registerTask('default', ['gitPull', 'vagrant_commands:restart']);
 	grunt.registerTask('provision', ['vagrant_commands:restart']);
+	grunt.registerTask('db', ['vagrant_commands:import_db']);
+	grunt.registerTask('plugins', ['vagrant_commands:install_plugins']);
+	grunt.registerTask('relink', ['gitPull:dependencies', 'vagrant_commands:symlinks']);
 
 	grunt.util.linefeed = '\n';
 };
