@@ -7,11 +7,6 @@ function generateSiteId() {
   this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
 }
 
-function projectDir() {
-  this.mkdir(this.site.url);
-  process.chdir(this.site.url);
-}
-
 function vvv() {
   this.template('_vvv.json', 'vvv.json');
 }
@@ -107,7 +102,6 @@ function sql() {
 
 module.exports = {
   generateSiteId: generateSiteId,
-  projectDir: projectDir,
   vvv: vvv,
   config: config,
   src: src,

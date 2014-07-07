@@ -34,7 +34,6 @@ var VVVGenerator = yeoman.generators.Base.extend({
   dependencyRepo: prompts.dependencyRepo,
   // output
   generateSiteId: output.generateSiteId,
-  projectDir: output.projectDir,
   vvv: output.vvv,
   config: output.config,
   src: output.src,
