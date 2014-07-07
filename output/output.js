@@ -47,6 +47,7 @@ function node() {
 }
 
 function scripts() {
+  this.copy('scripts/cleanup.sh');
   this.copy('scripts/clear-links.sh');
   this.copy('scripts/dependencies.sh');
   this.copy('scripts/import-sql.sh');

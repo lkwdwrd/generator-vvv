@@ -21,13 +21,13 @@ var JSONGenerator = yeoman.generators.Base.extend({
   },
   //prompts
   getSiteInfo: prompts.getSiteInfo,
-  generateSiteId: prompts.generateSiteId,
   getWPInfo: prompts.getWPInfo,
   promptSubdomains: prompts.promptSubdomains,
   promptPlugins: prompts.promptPlugins,
   haveRepos: prompts.haveRepos,
   dependencyRepo: prompts.dependencyRepo,
   // output
+  generateSiteId: output.generateSiteId,
   vvv: output.vvv
 });
 
