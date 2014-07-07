@@ -27,7 +27,7 @@ function config() {
   this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
   this.template('_site-vars.sh', 'config/site-vars.sh');
   this.template('_vvv-hosts', 'config/vvv-hosts');
-  this.template('_proxy.conf', 'config/proxy.conf')
+  this.template('_proxy.conf', 'config/proxy.conf');
 }
 
 function src() {
@@ -40,6 +40,9 @@ function src() {
   this.copy('readmes/dropins-readme.md', 'src/dropins/readme.md');
   this.copy('readmes/plugins-readme.md', 'src/plugins/readme.md');
   this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
+
+  this.copy('plugins/object-cache.php', 'src/dropins/object-cache.php');
+  this.copy('plugins/advanced-cache.php', 'src/dropins/advanced-cache.php');
 }
 
 function node() {
