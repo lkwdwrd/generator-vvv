@@ -61,6 +61,16 @@ module.exports = function (grunt) {
 					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/src.sh']
 				]
 			},
+			proxy_on: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/proxy_on.sh']
+				]
+			},
+			proxy_off: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/proxy_off.sh']
+				]
+			},
 			cleanup: {
 				commands: [
 					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/cleanup.sh']
@@ -78,6 +88,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('db', ['vagrant_commands:import_db']);
 	grunt.registerTask('plugins', ['vagrant_commands:install_plugins']);
 	grunt.registerTask('relink', ['gitPull:dependencies', 'vagrant_commands:symlinks']);
+	grunt.registerTask('proxy_on', ['vagrant_commands:proxy_on']);
+	grunt.registerTask('proxy_off', ['vagrant_commands:proxy_off']);
 	grunt.registerTask('cleanup', ['vagrant_commands:cleanup']);
 
 	grunt.util.linefeed = '\n';

@@ -27,6 +27,7 @@ function config() {
   this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
   this.template('_site-vars.sh', 'config/site-vars.sh');
   this.template('_vvv-hosts', 'config/vvv-hosts');
+  this.template('_proxy.conf', 'config/proxy.conf')
 }
 
 function src() {
@@ -52,6 +53,8 @@ function scripts() {
   this.copy('scripts/dependencies.sh');
   this.copy('scripts/import-sql.sh');
   this.copy('scripts/plugins.sh');
+  this.copy('scripts/proxy_on.sh');
+  this.copy('scripts/proxy_off.sh');
   this.copy('scripts/src.sh');
   this.copy('scripts/update-db.sh');
   this.copy('vvv-init.sh');
