@@ -1,6 +1,5 @@
 #!/bin/bash
-source ../config/site-vars.sh
-cd ../
+source config/site-vars.sh
 
 # Plugins
 echo "Linking working directory pluins"

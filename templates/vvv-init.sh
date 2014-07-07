@@ -3,18 +3,19 @@ source config/site-vars.sh
 echo "Commencing $site_name Site Setup"
 
 # Save a site referece where we can get to it.
- if [[ ! -d /var/sites ]]
- 	then
- 	mkdir /var/sites
- fi
- ln -s $PWD /var/sites/$siteId
+if [[ ! -d /var/sites ]]
+	then
+	mkdir /var/sites
+fi
+rm /var/sites/$siteId
+ln -s $PWD /var/sites/$siteId
 
 # Make a database, if we don't already have one
 echo "Checking $site_name database."
 mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $siteId"
 mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $siteId.* TO wordpress@localhost IDENTIFIED BY 'wordpress';"
 
-sh scripts/import-sql.sh
+source scripts/import-sql.sh
 # Install WordPress if it's not already present.
 if [[ ! -d htdocs ]]
 	then
@@ -51,7 +52,7 @@ if [[ ! -d htdocs ]]
 	# Update Database as Needed - already checked for $live_domain
 	if [[ "$sql_imported" == "yes" ]]
 		then
-		sh scripts/update-db.sh
+		bash scripts/update-db.sh
 	fi
 	# If this is multisite and we've imported SQL, update the DB.
 	if [[ "$multisite" == "yes" ]] && [[ "$sql_imported" == "yes" ]]
@@ -67,10 +68,10 @@ if [[ ! -d htdocs ]]
 	fi
 fi
 
-sh scripts/plugins.sh
-sh scripts/clear-links.sh
-sh scripts/dependencies.sh
-sh scripts/src.sh
+bash scripts/plugins.sh
+bash scripts/clear-links.sh
+bash scripts/dependencies.sh
+bash scripts/src.sh
 
 # The Vagrant site setup script will restart Nginx for us
 echo "$site_name is now set up!";

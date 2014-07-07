@@ -3,6 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 
+function generateSiteId() {
+  this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
+}
+
 function projectDir() {
   this.mkdir(this.site.url);
   process.chdir(this.site.url);
@@ -25,10 +29,6 @@ function config() {
   this.template('_vvv-hosts', 'config/vvv-hosts');
 }
 
-function deps() {
-  this.copy('readmes/dependencies-readme.md', 'deps/readme.md');
-}
-
 function src() {
   this.mkdir('src');
   this.mkdir('src/dropins');
@@ -42,7 +42,7 @@ function src() {
 }
 
 function node() {
-  this.copy('_package.json', 'package.json');
+  this.template('_package.json', 'package.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
 }
 
@@ -99,10 +99,10 @@ function sql() {
 }
 
 module.exports = {
+  generateSiteId: generateSiteId,
   projectDir: projectDir,
   vvv: vvv,
   config: config,
-  deps: deps,
   src: src,
   node: node,
   scripts: scripts,

@@ -1,14 +1,12 @@
 #!/bin/bash
-source ../config/site-vars.sh
-cd ../htdocs/
+source config/site-vars.sh
 
 # Update domains in the WP DB.
-if [[ "$multisite" == "yes" ]] && [[ "$sql_imported" == "yes" ]]
+echo "Updating $site_name domains (this can take a while)."
+cd htdocs/
+if [[ "$multisite" == "yes" ]] && [[ ! -z $(wp --allow-root --url="$live_domain" option get siteurl) ]]
 	then
-	# Attempt to update the network sites if we importend it.
-	echo "Updating Network"
-	for url in $(wp --allow-root site list --fields=url --format=csv | tail -n +2)
-	do
-	  wp --url="$url" --allow-root core update-db
-	done
+	wp --allow-root --url="$live_domain" search-replace "$live_domain" "$domain" --skip-columns=guid
+else
+	wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
 fi

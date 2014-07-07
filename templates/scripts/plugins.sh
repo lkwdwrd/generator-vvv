@@ -1,6 +1,5 @@
 #!/bin/bash
-source ../config/site-vars.sh
-cd ..
+source config/site-vars.sh
 
 #Install all WordPress.org plugins in the org_plugins file using CLI
 echo "Checking for missing WordPress.org Plugins"

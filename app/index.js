@@ -27,20 +27,20 @@ var VVVGenerator = yeoman.generators.Base.extend({
   },
   //prompts
   getSiteInfo: prompts.getSiteInfo,
-  generateSiteId: prompts.generateSiteId,
   getWPInfo: prompts.getWPInfo,
   promptSubdomains: prompts.promptSubdomains,
   promptPlugins: prompts.promptPlugins,
   haveRepos: prompts.haveRepos,
   dependencyRepo: prompts.dependencyRepo,
   // output
+  generateSiteId: output.generateSiteId,
   projectDir: output.projectDir,
   vvv: output.vvv,
   config: output.config,
-  deps: output.deps,
+  src: output.src,
   node: output.node,
   scripts: output.scripts,
-  setup: output.setup,
+  findSQL: output.findSQL,
   sql: output.sql
 });
 

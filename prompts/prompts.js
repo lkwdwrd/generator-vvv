@@ -30,10 +30,6 @@ function getSiteInfo() {
   }.bind(this));
 }
 
-function generateSiteId() {
-  this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
-}
-
 function getWPInfo() {
   var done = this.async();
 
@@ -150,7 +146,6 @@ function dependencyRepo() {
 
 module.exports = {
   getSiteInfo: getSiteInfo,
-  generateSiteId: generateSiteId,
   getWPInfo: getWPInfo,
   promptSubdomains: promptSubdomains,
   promptPlugins: promptPlugins,

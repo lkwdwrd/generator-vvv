@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ../
 
 # Symlink working directories
 # First clear out any links already present

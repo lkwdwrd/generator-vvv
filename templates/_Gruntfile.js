@@ -4,13 +4,17 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg:    grunt.file.readJSON('package.json'),
 		gitPull: {
-			<% if (dependencies) {
+<%			 if (dependencies) {
 %>			dependencies: {
-				repose: [
-					path: ['deps'],
-					repo: '<%= dependencies %>'
+				repos: [
+					{
+						path: [],
+						dir: 'deps',
+						repo: '<%= dependencies %>'
+					}
 				]
-			}<% if ( repos ) %>,<% } }
+			}<% if ( repos ) { %>,
+<% } }
 			if ( repos ) {
 %>			themes: {
 				repos: [
@@ -35,6 +39,7 @@ module.exports = function (grunt) {
 		vagrant_commands: {
 			restart: {
 				commands: [
+					['up'],
 					['halt'],
 					['up', '--provision']
 				]

@@ -1,9 +1,8 @@
 #!/bin/bash
-source ../config/site-vars.sh
-cd ../
+source config/site-vars.sh
 
 # Then link dependecy Repos
-if [[ -d deps/plguins ]]
+if [[ -d deps/plugins ]]
 	then
 	echo "Linking plugin dependencies"
 	find deps/plugins/ \( ! -regex '.*/\..*' \) -maxdepth 1 -mindepth 1 -exec ln -s $PWD/{} $PWD/htdocs/wp-content/plugins/ \;

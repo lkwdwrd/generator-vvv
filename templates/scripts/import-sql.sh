@@ -1,9 +1,8 @@
 #!/bin/bash
-source ../config/site-vars.sh
-cd ../
+source config/site-vars.sh
 
 # Deal with our database dumps.
-first_sql=$(ls config/data | grep -i -E '\.sql(?:.gz)?$' | head -1)
+first_sql=$(ls config/data | grep -i -E '\.sql(.gz)?$' | head -1)
 if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 	then
 	echo "Importing $first_sql for $site_name."
@@ -15,21 +14,13 @@ if [[ ! -z "$first_sql" ]] && [[ -f config/data/$first_sql ]]
 		#Deal with normal sql files
 		mysql -u root --password=root $siteId < config/data/$first_sql
 	fi
-	mv ../config/data/$first_sql config/data/$first_sql.imported
+	mv config/data/$first_sql config/data/$first_sql.imported
 	if [[ -d htdocs ]] && [[ ! -z $live_domain ]]
 		then
-		echo "Updating $site_name domains (this can take a while)."
-		cd htdocs
-		if [[ "$multisite" == "yes" ]]
-			then
-			wp --allow-root --url="$domain" search-replace "$live_domain" "$domain" --skip-columns=guid
-		else
-			wp --allow-root search-replace "$live_domain" "$domain" --skip-columns=guid
-		fi
-		cd ../
+		bash scripts/update-db.sh
 	elif [[ ! -d htdocs ]]
 		then
-		exit 1
+		sql_imported='yes'
 	fi
 else
 	echo "No SQL file found, skipping import."
