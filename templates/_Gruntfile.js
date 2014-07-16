@@ -40,8 +40,7 @@ module.exports = function (grunt) {
 			restart: {
 				commands: [
 					['up'],
-					['halt'],
-					['up', '--provision']
+					['provision']
 				]
 			},
 			import_db: {
