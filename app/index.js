@@ -17,7 +17,17 @@ var VVVGenerator = yeoman.generators.Base.extend({
 
     this.on('end', function () {
       if (!this.options['skip-install']) {
-        this.installDependencies();
+        this.installDependencies({
+          bower: false,
+          callback: function () {
+            if (!this.options['skip-grunt']) {
+              this.log(chalk.green.bold('Running default grunt task'));
+              this.spawnCommand('grunt', ['default']);
+            } else {
+              this.log(chalk.yellow('skipping grunt. Run grunt manually when you are ready.'));
+            }
+          }.bind(this)
+        });
       }
     });
   },
