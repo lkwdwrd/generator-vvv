@@ -1,46 +1,104 @@
-# generator-vvv [![Build Status](https://secure.travis-ci.org/lkwdwrd/generator-vvv.png?branch=master)](https://travis-ci.org/lkwdwrd/generator-vvv)
+# generator-vvv
 
-> [Yeoman](http://yeoman.io) generator
+## Dependencies
 
+**1. [Node](http://nodejs.org)**
 
-## Getting Started
+*Download:* http://nodejs.org/download/
 
-### What is Yeoman?
+**2. [Grunt](http://gruntjs.com/)**
 
-Trick question. It's not a thing. It's this guy:
+*Install:*
 
-![](http://i.imgur.com/JHaAlBJ.png)
+```
+$ npm install -g grunt-cli
+```
 
-Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
+*Documentation:* http://gruntjs.com/getting-started
 
-Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
+**3. [Yeoman](http://yeoman.io/)**
+
+*Install:*
 
 ```
 $ npm install -g yo
 ```
 
-### Yeoman Generators
+*Documentation:* http://yeoman.io/learning/index.html
 
-Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
+**4. [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)**
 
-To install generator-vvv from npm, run:
+*Install:*
+
+```
+$ cd ~/
+$ mkdir vagrant-local
+$ cd vagrant-local
+$ git clone git://github.com/Varying-Vagrant-Vagrants/VVV.git .
+```
+
+*Documentation:* https://github.com/Varying-Vagrant-Vagrants/VVV#getting-started
+
+
+## Getting Started
+
+**1. Install generator-vvv from Node Package Manager**
 
 ```
 $ npm install -g generator-vvv
 ```
 
-Finally, initiate the generator:
+**2. Navigate to your project directory within vagrant-local/www**
+
+```
+$ cd ~/vagrant-local/www/projectname
+```
+
+**3. Initiate the generator from within your project directory:**
 
 ```
 $ yo vvv
 ```
 
-### Getting To Know Yeoman
+**4. Answer the setup questions:**
 
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
 
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
+* What will your site be called?  [site name]
+* What would you like your domain to be? [site domain]
+* What is the live domain? [existing live site domain]
+* What version of WordPress would you like to install?  [full version # for example ‘3.9.1’ or ‘latest’]
+* Will this be a network install?  [y/N]
+* Add a plugin [Add plugin repositories to the project]
+* Do you want to add an external repo?  [Add a theme, plugin etc.]
+* Where is the dependency repository? [Shared repository with common themes, plugins for multiple projects]
 
+Once you answer these question generator-vvv goes to work:
+
+Creates the site configuration files
+Runs npm install pulling all of the grunt dependencies
+Runs grunt pulling in all repositories
+Runs vagrant provision to provision the site.
+
+
+## Sub-generators
+
+###JSON
+
+To generate just a `vvv.json` file you can use the json sub-generator just like you would the main generator.
+
+```
+$ yo vvv:json
+```
+
+This will generate just the JSON site configuration file that defines this project.
+
+### Bootstrap
+
+Given a `vvv.json` file, you can run the bootstrap sub-generator to create your project. This will read the `vvv.json` file and set up your your project accordingly.
+
+```
+$ yo vvv:bootstrap
+```
 
 ## License
 
