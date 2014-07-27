@@ -8,6 +8,7 @@ domain='<%= site.url %>'
 admin_user='wordpress'
 admin_pass='wordpress'
 admin_email='wordpress@<%= site.url %>'
+prefix='<%= wordpress.prefix %>'
 <% if ( wordpress.multisite ) { %>
 multisite='yes'
 subdomain='<% if ( wordpress.subdomain ) { print("yes"); } else { print("no"); } %>'

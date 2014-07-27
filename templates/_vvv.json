@@ -6,6 +6,7 @@
 	},
 	"wordpress": {
 		"version": "<%= wordpress.version %>",
+		"prefix": "<%= wordpress.prefix %>",
 		"multisite": <% if( wordpress.multisite ) { %>true<% } else { %>false<% } %>,
 		"subdomain": <% if( ! wordpress.subdomain ) { %>false<% } else { %>true,
 		"subdomains": [<%
