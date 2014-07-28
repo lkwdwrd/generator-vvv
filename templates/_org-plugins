@@ -1,14 +1,13 @@
 # List out any plugins in the WordPress.org repository and they will be installed.
 # Each line should contain a plugin slug for wp-cli
-#<% if ( 1 > plugins.length ) { %>
-# For example, uncomment the lines below to get lots of debug bar goodies in your project.
-# debug-bar
-# debug-bar-console
-# debug-bar-cron
-# debug-bar-extender<%
-} else {
+#<% if ( 'undefined' !== typeof plugins && 0 < plugins.length ) {
 	var i, length;
 	for( i = 0, length = plugins.length; i < length; i++ ) { %>
 <%= plugins[i] %><%
 	}
-} %>
+} else { %>
+# For example, uncomment the lines below to get lots of debug bar goodies in your project.
+# debug-bar
+# debug-bar-console
+# debug-bar-cron
+# debug-bar-extender<% } %>

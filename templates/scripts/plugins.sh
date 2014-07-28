@@ -2,7 +2,7 @@
 source config/site-vars.sh
 
 #Install all WordPress.org plugins in the org_plugins file using CLI
-echo "Checking for missing WordPress.org Plugins"
+echo "Checking WordPress.org Plugins"
 if [[ config/org-plugins ]]
 then
 	# Move back into htdocs to install .org plugins.
@@ -16,7 +16,7 @@ then
 				then
 				wp --allow-root plugin install "$line" --allow-root
 			else
-				echo $line;
+				echo "$line is already installed";
 			fi
 		fi
 	done < ../config/org-plugins

@@ -70,6 +70,7 @@ if [[ ! -d htdocs ]]
 	fi
 fi
 
+bash scripts/themes.sh
 bash scripts/plugins.sh
 bash scripts/clear-links.sh
 bash scripts/dependencies.sh

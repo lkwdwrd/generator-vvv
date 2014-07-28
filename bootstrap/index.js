@@ -52,6 +52,7 @@ var BootstrapVVV = yeoman.generators.Base.extend({
     this.wordpress = src.wordpress;
     this.repos = src.repos;
     this.plugins = src.plugins;
+    this.themes = src.themes;
     this.dependencies = src.dependencies;
     this.db = src.db;
   },

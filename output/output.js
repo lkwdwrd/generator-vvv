@@ -18,6 +18,7 @@ function config() {
   this.copy('readmes/data-readme.md', 'config/data/readme.md');
   this.copy('wp-constants', 'config/wp-constants');
   this.template('_org-plugins', 'config/org-plugins');
+  this.template('_org-themes', 'config/org-themes');
   this.template('_wp-ms-constants', 'config/wp-ms-constants');
   this.template('_vvv-nginx.conf', 'vvv-nginx.conf');
   this.template('_site-vars.sh', 'config/site-vars.sh');
@@ -51,6 +52,7 @@ function scripts() {
   this.copy('scripts/dependencies.sh');
   this.copy('scripts/import-sql.sh');
   this.copy('scripts/plugins.sh');
+  this.copy('scripts/themes.sh');
   this.copy('scripts/proxy_on.sh');
   this.copy('scripts/proxy_off.sh');
   this.copy('scripts/src.sh');

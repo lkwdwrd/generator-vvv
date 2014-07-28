@@ -53,6 +53,11 @@ module.exports = function (grunt) {
 					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/plugins.sh']
 				]
 			},
+			install_themes: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/themes.sh']
+				]
+			},
 			symlinks: {
 				commands: [
 					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/clear-links.sh'],
@@ -86,6 +91,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('provision', ['vagrant_commands:restart']);
 	grunt.registerTask('db', ['vagrant_commands:import_db']);
 	grunt.registerTask('plugins', ['vagrant_commands:install_plugins']);
+	grunt.registerTask('themes', ['vagrant_commands:install_themes']);
 	grunt.registerTask('relink', ['gitPull:dependencies', 'vagrant_commands:symlinks']);
 	grunt.registerTask('proxy_on', ['vagrant_commands:proxy_on']);
 	grunt.registerTask('proxy_off', ['vagrant_commands:proxy_off']);
