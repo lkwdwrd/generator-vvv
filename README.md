@@ -1,105 +1,127 @@
 # generator-vvv
 
-## Dependencies
+generator-vvv is a [Yeoman](http://yeoman.io/) generator that creates shareable WordPress installations
+for [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)
 
-**1. [Node](http://nodejs.org)**
+## Rationale
 
-*Download:* http://nodejs.org/download/
+Working in a WordPress agency has some amazing benefits: the close and constant communication, learning, code review and so forth. It also allows projects to get the benefit of many different, more specialized developers. Perhaps we have someone "hop in" on a project to write some complex JS. Or someone who is an expert with caching can come in and make some tweaks.
 
-**2. [Grunt](http://gruntjs.com/)**
+This is great until you realize that it can take _hours_ for a developer to collect all the resources necessary to create a development environment: Theme repositories, plugins, databases, and configuration details.
 
-*Install:*
+Instead of having to communicate these details and let the developer churn through them, we thought it would be awesome to represent each project using a single json file. A lightweight json file can be easily passed around. Development environment ramp-up is reduced to two steps:
 
-```
-$ npm install -g grunt-cli
-```
+1. Put vvv.json into a folder
+2. `cd` into that folder and run `yo vvv:bootstrap`
 
-*Documentation:* http://gruntjs.com/getting-started
-
-**3. [Yeoman](http://yeoman.io/)**
-
-*Install:*
-
-```
-$ npm install -g yo
-```
-
-*Documentation:* http://yeoman.io/learning/index.html
-
-**4. [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)**
-
-*Install:*
-
-```
-$ cd ~/
-$ mkdir vagrant-local
-$ cd vagrant-local
-$ git clone git://github.com/Varying-Vagrant-Vagrants/VVV.git .
-```
-
-*Documentation:* https://github.com/Varying-Vagrant-Vagrants/VVV#getting-started
-
+After step two, the site is running on VVV, including host file mapping, databases, all of it. Hours of developer on-boarding is reduced to minutes. Developers will be able to hop in and out of projects faster than ever. Collaboration becomes effortless.
 
 ## Getting Started
 
-**1. Install generator-vvv from Node Package Manager**
+### Varying Vagrant Vagrants
+generator-vvv is a companion for [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV). If you aren't using VVV, it has huge benefits for local WordPress development, and we highly recommend it. However, this generator is really only useful for VVV users.
 
-```
-$ npm install -g generator-vvv
-```
+Additionally, because this is creating shareable WordPress installations, it is designed to run inside vagrant's 'www' folder. If generator-vvv does not have access to a vagrant installation (to run `vagrant` shell commands) it gets indigestion.
 
-**2. Navigate to your project directory within vagrant-local/www**
+### Node
+This is a [Yeoman](http://yeoman.io/) generator. Yeoman requires [Node](http://nodejs.org/) 0.8.19 or newer. It also
+requires Grunt and Yo, but we'll take care of those if you don't already have them.
 
-```
-$ cd ~/vagrant-local/www/projectname
-```
+### Installing
+`npm install -g generator-vvv`
 
-**3. Initiate the generator from within your project directory:**
+We'll then go get a whole bunch of dependencies and you'll get time for a coffee break and a shiny
+new command line tool when you get back.
+
+## Creating a sharable project
+
+If this is a completely new project, consider using `yo vvv:create` and following the prompts. It will generate the vvv.json file and automatically run `yo vvv:bootstrap`. Once complete, you'll have a running WordPress website that's ready for sharing.
+
+If this is an existing project, you'll want to collect some details before running generator-vvv:
+* Export a copy of the .sql file (it can be saved in gzipped form, .gz). This can be uploaded to a remote FTP server or just passed around between developers.
+* Push the themes and plugins you are developing to their own, individual repositories. These don't have to be private repositories, but everyone you'll share the project with will need access. Note the clone url.
+* Bundle any plugins that are not being developed and are not in the wordpress.org repository into a 'dependencies' repository. Note the clone url. (Details below)
+* Make a list of all the wordpress.org plugins and themes that need to be installed.
+* Note the production URL.
+* If this is a subdomain multisite, note each of the subdomains.
+
+Collecting this beforehand will make it easier when you run `vvv:json`.
+
+Once run, take a second look at the resulting JSON file. This file is also what you'd share with other developers (along with the SQL dump).
+
+Finally, bootstrap the JSON file by running `vvv:json`
+
+## Receiving a shared project
+If you've been lucky enough to be given a vvv.json file for a project, you're in good shape — and just a few minutes away from a development environment.
+
+Two things you'll need to know, and can answer yourself:
+* Do you need a copy of the database?
+* What is the development domain name?
+
+If you take a peek at the vvv.json file it has the answers to both those questions. Under "site" it lists the "url" — this is the development url and generally ends in ".dev"
+
+Also in the vvv.json file will be a line that can specify the URL for a remote database. If this line exists, you won't need a database file. If it doesn't exist, you'll need to get in touch with someone to get a copy of the (generally production) database .sql file. This can be .sql or .sql.gz.
+
+### Step 1: Create a folder
+Create an empty folder in Vagrant's `www` directory. You can name it whatever you like, but we suggest
+using the development domain name (without the tld).
+
+Put the vvv.json file you got inside that empty folder.
+
+If you have a local database .sql file, put that in the folder with vvv.json.
+
+### Step 2: Run generator-vvv
+
+`yo vvv:bootstrap`
+
+This command will use the vvv.json file to download and clone a bunch of things (be sure you have internet).
+
+## Commands (generators)
+
+### vvv
 
 ```
 $ yo vvv
 ```
 
-**4. Answer the setup questions:**
+Lists available generators
 
-
-* What will your site be called?  [site name]
-* What would you like your domain to be? [site domain]
-* What is the live domain? [existing live site domain]
-* What version of WordPress would you like to install?  [full version # for example ‘3.9.1’ or ‘latest’]
-* Will this be a network install?  [y/N]
-* Add a plugin [Add plugin repositories to the project]
-* Do you want to add an external repo?  [Add a theme, plugin etc.]
-* Where is the dependency repository? [Shared repository with common themes, plugins for multiple projects]
-
-Once you answer these question generator-vvv goes to work:
-
-Creates the site configuration files
-Runs npm install pulling all of the grunt dependencies
-Runs grunt pulling in all repositories
-Runs vagrant provision to provision the site.
-
-
-## Sub-generators
-
-###JSON
-
-To generate just a `vvv.json` file you can use the json sub-generator just like you would the main generator.
-
+### vvv:json
 ```
 $ yo vvv:json
 ```
+This command creates a `vvv.json` file that can then be shared with other developers. This JSON file defines the entire WordPress site, including domain names, plugins, and themes.
 
-This will generate just the JSON site configuration file that defines this project.
+See "Creating a Shareable Project" above for workflow tips.
 
-### Bootstrap
-
-Given a `vvv.json` file, you can run the bootstrap sub-generator to create your project. This will read the `vvv.json` file and set up your your project accordingly.
-
+### vvv:bootstrap
 ```
 $ yo vvv:bootstrap
 ```
 
-## License
+This command takes a `vvv.json` file and (depending) a database .sql file and creates the entire project. See "Receiving a shared project" for workflow tips.
 
-MIT
+#### Chain of Events
+
+`vvv:bootstrap` does a lot of magic. It's worth having an idea of what's happening. When you run the command, here's roughly what happens.
+
+1. Yo reads the vvv.json file
+1. Yo generates files needed for VVV automatic site setup. This includes the config and src directories, nginx config templates, host file templates. It also creats a package.json file specifically for generator-vvv with some specific grunt modules.
+1. Yo runs `npm install`, which reads package.json and downloads the required node modules
+1. Yo runs `grunt`
+	1. Grunt clones all your remote repositories. For example, your in-development theme
+	1. Grunt re-provisions VVV which kicks off VVV auto site setup.
+		1. Using wp-cli, VVV triggers a WordPress installation.
+		1. Using wp-cli, VVV imports the database
+		1. Using wp-cli, VVV installs plugins and themes from the WordPress.org repositories
+		1. VVV copies the nginx configuration file
+		1. VVV updates its own host file. If the Vagrant [hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) plugin has been installed, it will also update the local system's host file.
+		1. VVV restarts the servers
+
+### vvv:create
+```
+$ yo vvv:create
+```
+This command combines `vvv:json` and `vvv:bootstrap` into one command to make it easy to create a completely new site.
+
+@todo: document grunt commands
