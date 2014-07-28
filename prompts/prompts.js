@@ -51,7 +51,12 @@ function getWPInfo() {
       name:    'subdomain',
       message: 'Is this a subdomain install?',
       default: false
-    }
+    },
+		{
+			name: 'prefix',
+			message: 'database prefix',
+			default: 'wp_'
+		}
   ];
   // gather initial settings
   this.prompt(prompts, function (props) {
@@ -59,7 +64,8 @@ function getWPInfo() {
       version: props.version,
       multisite: props.multisite,
       subdomain: props.subdomain,
-      subdomains: []
+      subdomains: [],
+			prefix: props.prefix
     };
     done();
   }.bind(this));

@@ -31,7 +31,7 @@ if [[ ! -d htdocs ]]
 	# Move into htdocs to run 'wp' commands.
 	cd htdocs
 	wp --allow-root core download --version="$wordpressVersion"
-	echo "$constants" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --extra-php
+	echo "$constants" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --dbprefix="$prefix" --extra-php
 	#Install as needed
 	if ! $(wp --allow-root core is-installed)
 		then
