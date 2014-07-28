@@ -7,8 +7,10 @@ if [[ ! -d /var/sites ]]
 	then
 	mkdir /var/sites
 fi
-rm /var/sites/$siteId
-ln -s $PWD /var/sites/$siteId
+if [[ ! -h /var/sites/$siteId ]]
+	then
+	ln -s $PWD /var/sites/$siteId
+fi
 
 # Make a database, if we don't already have one
 echo "Checking $site_name database."
