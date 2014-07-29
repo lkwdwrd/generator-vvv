@@ -42,25 +42,24 @@ Follow the prompts. It will generate a vvv.json file. The generator uses the JSO
 For more details, including how to set up an existing project, [there is a more in-depth version of this guide.](docs/creating-a-project.md)
 
 ## Receiving a vvv.json file
-@todo shorten
-
 If you've been lucky enough to be given a vvv.json file for a project, you're in good shape — and just a few minutes away from a development environment.
 
 ### Step 1: Create a Folder
-Create an empty folder in Vagrant's `www` directory to house the project.
+1. Create an empty folder in Vagrant's `www` directory to house the project.
+1. Put the vvv.json file you got inside that empty folder.
+1. Put a copy of the database (.sql or .sql.gz) into the folder with the JSON file.
 
-Put the vvv.json file you got inside that empty folder.
-
-Put a copy of the database (.sql or .sql.gz) into the folder with the JSON file.
-<small>_note:_ It's possible that you won't need a database. You can check the vvv.json file for a line that specifies a remote database URL. If specified, you can skip this step.</small>
+_Note:_ It's possible that you won't need a database. Check vvv.json file for a line that specifies a remote database URL. If specified, you can skip this step.
 
 
 ### Step 2: Run generator-vvv
-Be sure you have internet access, and run:
+Be sure you have internet access and run:
 ````
 $ yo vvv:bootstrap
 ````
 The generator uses the JSON file to bootstrap several scripts, clone theme and plugin repositories, and ultimately end up with a development environment.
+
+You may now navigate to the development environment domain. It's "URL" in vvv.json. If you don't have Vagrant's autohostupdater plugin installed, you'll need to enter the domain in your hosts file.
 
 # Documentation
 * [Creating a sharable project](docs/creating-a-project.md)
