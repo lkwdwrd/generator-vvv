@@ -19,18 +19,6 @@ $ yo vvv:create
 
 Follow the prompts. When complete, you'll have a complete WordPress installation. The vvv.json file can be shared with other developers for use with `yo:bootstrap`
 
-## Rationale
-
-Working in a WordPress agency has some amazing benefits: the close and constant communication, learning, code review and so forth. It also allows projects to get the benefit of many different, more specialized developers. Perhaps we have someone "hop in" on a project to write some complex JS. Or someone who is an expert with caching can come in and make some tweaks.
-
-This is great until you realize that it can take _hours_ for a developer to collect all the resources necessary to create a development environment: Theme repositories, plugins, databases, and configuration details.
-
-Instead of having to communicate these details and let the developer churn through them, we thought it would be awesome to represent each project using a single json file. A lightweight json file can be easily passed around. Development environment ramp-up is reduced to two steps:
-
-1. Put vvv.json into a folder
-2. `cd` into that folder and run `yo vvv:bootstrap`
-
-After step two, the site is running on VVV, including host file mapping, databases, all of it. Hours of developer on-boarding is reduced to minutes. Developers will be able to hop in and out of projects faster than ever. Collaboration becomes effortless.
 
 ## Getting Started
 
@@ -92,54 +80,11 @@ If you have a local database .sql file, put that in the folder with vvv.json.
 
 This command will use the vvv.json file to download and clone a bunch of things (be sure you have internet).
 
-## Commands (generators)
 
-### vvv
-
-```
-$ yo vvv
-```
-
-Lists available generators
-
-### vvv:json
-```
-$ yo vvv:json
-```
-This command creates a `vvv.json` file that can then be shared with other developers. This JSON file defines the entire WordPress site, including domain names, plugins, and themes.
-
-See "Creating a Shareable Project" above for workflow tips.
-
-### vvv:bootstrap
-```
-$ yo vvv:bootstrap
-```
-
-This command takes a `vvv.json` file and (depending) a database .sql file and creates the entire project. See "Receiving a shared project" for workflow tips.
-
-#### Chain of Events
-
-`vvv:bootstrap` does a lot of magic. It's worth having an idea of what's happening. When you run the command, here's roughly what happens.
-
-1. Yo reads the vvv.json file
-1. Yo generates files needed for VVV automatic site setup. This includes the config and src directories, nginx config templates, host file templates. It also creats a package.json file specifically for generator-vvv with some specific grunt modules.
-1. Yo runs `npm install`, which reads package.json and downloads the required node modules
-1. Yo runs `grunt`
-	1. Grunt clones all your remote repositories. For example, your in-development theme
-	1. Grunt re-provisions VVV which kicks off VVV auto site setup.
-		1. Using wp-cli, VVV triggers a WordPress installation.
-		1. Using wp-cli, VVV imports the database
-		1. Using wp-cli, VVV installs plugins and themes from the WordPress.org repositories
-		1. VVV copies the nginx configuration file
-		1. VVV updates its own host file. If the Vagrant [hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) plugin has been installed, it will also update the local system's host file.
-		1. VVV restarts the servers
-
-### vvv:create
-```
-$ yo vvv:create
-```
-This command combines `vvv:json` and `vvv:bootstrap` into one command to make it easy to create a completely new site.
-
-@todo: document grunt commands
-@todo: document folder structure for auto site setup
-@todo: document dependencies repository structure and purpose
+# Documentation
+* [Creating a sharable project](docs/creating-a-project.md)
+* [Folder Structure](docs/folder-structure.md)
+* [Rationale](docs/rationale.md)
+* [Chain of Events](docs/chain-of-events.md)
+* [Developers](docs/developers.md)
+* [Commands Reference](docs/commands-reference.md)
