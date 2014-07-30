@@ -3,6 +3,22 @@
 generator-vvv is a [Yeoman](http://yeoman.io/) generator that creates shareable WordPress installations
 for [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)
 
+## Super Quick Start (kick the tires)
+
+Install (if needed):
+* [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)
+* [Node](http://nodejs.org/)
+
+Starting directory:
+`cd` into Vagrant's `www` directory.
+
+````
+$ mkdir yo-vvv-test
+$ yo vvv:create
+````
+
+Follow the prompts. When complete, you'll have a complete WordPress installation. The vvv.json file can be shared with other developers for use with `yo:bootstrap`
+
 ## Rationale
 
 Working in a WordPress agency has some amazing benefits: the close and constant communication, learning, code review and so forth. It also allows projects to get the benefit of many different, more specialized developers. Perhaps we have someone "hop in" on a project to write some complex JS. Or someone who is an expert with caching can come in and make some tweaks.
@@ -125,3 +141,5 @@ $ yo vvv:create
 This command combines `vvv:json` and `vvv:bootstrap` into one command to make it easy to create a completely new site.
 
 @todo: document grunt commands
+@todo: document folder structure for auto site setup
+@todo: document dependencies repository structure and purpose
