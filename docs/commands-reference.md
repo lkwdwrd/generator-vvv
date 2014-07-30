@@ -66,16 +66,35 @@ To add a wordpress.org plugin to an already active installation:
 * run this command
 
 ### themes
-@todo stub
+````
+$ grunt themes
+````
+Runs a script that updates the current installation with any plugins specified in the `/config/org-themes` file. This file is created by vvv.json.
 
 ### relink
-@todo stub
+````
+$ grunt relink
+````
+Runs `git pull` on the dependencies repository to pull down any changes, then runs a command to re-establish all the symlinks.
+
+This is highly useful if you add or remove anything from the dependencies repository. Commit and push your changes to the dependencies repository, then run `grunt relink` to bring them into your project.
 
 ### proxy_on
-@todo stub
+````
+$ grunt proxy_on
+````
+Turns the image proxy on (it is on by default). When the image proxy is on and vvv.json specifies an original URL, Nginx will look to the original URL for static assets if they are not found locally. This makes it so we don't need all of wp-content/uploads locally.
 
 ### proxy_off
-@todo stub
+````
+$ grunt proxy_off
+````
+Turns the image proxy off. This may be helpful for debugging.
 
 ### cleanup
-@todo stub
+````
+$ grunt cleanup
+````
+This removes _everything_ that generator-vvv created _except_ vvv.json and any local databases.
+
+If you'd like to re-create the install from scratch, you can immediately run `yo vvv:bootstrap`.
