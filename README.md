@@ -63,16 +63,23 @@ You may now navigate to the development environment domain. It's "URL" in vvv.js
 
 # Documentation
 * [Working on WordPress](docs/working-on-wordpress.md)
+
         Editing themes & installing plugins.
 * [Creating a sharable project](docs/creating-a-project.md)
+
         In-depth setting up an existing project to make it sharable
 * [Folder Structure](docs/folder-structure.md)
+
         The file system result of running `yo vvv:bootstrap`
 * [Chain of Events](docs/chain-of-events.md)
+
         What happens when running `yo vvv:bootstrap`
 * [Development](docs/development.md)
+
         How to contribute
 * [Commands Reference](docs/commands-reference.md)
+
         All of the `yo` and `grunt` commands available
 * [Rationale](docs/rationale.md)
+
         Why we built this
