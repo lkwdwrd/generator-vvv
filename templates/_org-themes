@@ -1,0 +1,10 @@
+# List out any themes in the WordPress.org repository and they will be installed.
+# Each line should contain a theme slug for wp-cli
+#<% if ( 'undefined' !== typeof themes && 0 < themes.length ) {
+	var i, length;
+	for( i = 0, length = themes.length; i < length; i++ ) { %>
+<%= themes[i] %><%
+	}
+} else { %>
+# For example, uncomment the lines below to install the twentyten theme.
+# twentyten<% } %>
