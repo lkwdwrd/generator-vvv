@@ -1,5 +1,4 @@
 # Chain of Events
-
 `vvv:bootstrap` does a lot of magic. It's worth having an idea of what's happening. When you run the command, here's roughly what happens.
 
 1. Yo reads the vvv.json file
