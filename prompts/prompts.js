@@ -142,7 +142,7 @@ function dependencyRepo() {
 
   this.prompt([{
       name:    'dependencies',
-      message: 'Where is the depenency repository?'
+      message: 'Where is the dependency repository?'
     }], function (props) {
       this.dependencies = props.dependencies;
       done();
