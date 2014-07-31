@@ -1,7 +1,14 @@
 #!/bin/bash
 source config/site-vars.sh
-
-read -p "Are you sure you want to remove $site_name? [Y/n]" -n 1 -r
+while [[ -z $REPLY ]] || ! [[ $REPLY =~ ^[YyNn]$ ]]
+	do
+	read -p "Are you sure you want to remove $site_name? [Y/n]" -r
+	if ! [[ $REPLY =~ ^[YyNn]$ ]]
+		then
+		echo "Please enter only Y or n."
+	fi
+	echo ""
+done
 if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 	echo "Removing the nginx configuration"
@@ -9,8 +16,20 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 	find /etc/nginx/custom-sites -name "vvv-auto-${dirname}*.conf" -exec sudo rm {} \;
 
 	echo "Cleaning VM's hosts file."
-	# Need to read in all of the lines in our hosts declaration
-	# and remove each from the hosts file.
+	if [[ -f config/vvv-hosts ]]
+		then
+		domains=""
+		while IFS='' read -r line || [ -n "$line" ]; do
+			if [[ "#" != ${line:0:1} ]];
+				then
+				domains="$domains\|$line"
+			fi
+		done < config/vvv-hosts
+		domains="${domains:2}"
+		sed "/\(${domains}\)/d" /etc/hosts > /tmp/hosts
+		sudo mv /tmp/hosts /etc/hosts
+		sudo chown root:root /etc/hosts
+	fi
 	
 	echo "Removing the database"
 	mysql -u root --password=root -e "DROP DATABASE $siteId"
