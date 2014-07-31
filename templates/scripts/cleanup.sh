@@ -1,5 +1,7 @@
 #!/bin/bash
 source config/site-vars.sh
+
+#Confirm Process
 while [[ -z $REPLY ]] || ! [[ $REPLY =~ ^[YyNn]$ ]]
 	do
 	read -p "Are you sure you want to remove $site_name? [Y/n]" -r
@@ -9,8 +11,11 @@ while [[ -z $REPLY ]] || ! [[ $REPLY =~ ^[YyNn]$ ]]
 	fi
 	echo ""
 done
+
+#Run cleanup as requested
 if [[ $REPLY =~ ^[Yy]$ ]]
 	then
+
 	echo "Removing the nginx configuration"
 	dirname="$(basename $(pwd -P))"
 	find /etc/nginx/custom-sites -name "vvv-auto-${dirname}*.conf" -exec sudo rm {} \;
