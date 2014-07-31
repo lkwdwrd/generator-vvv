@@ -4,8 +4,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg:    grunt.file.readJSON('package.json'),
 		gitPull: {
-<%			 if (dependencies) {
-%>			dependencies: {
+			dependencies: {
 				repos: [
 					{
 						path: [],
@@ -14,7 +13,7 @@ module.exports = function (grunt) {
 					}
 				]
 			}<% if ( repos ) { %>,
-<% } }
+<% }
 			if ( repos ) {
 %>			themes: {
 				repos: [
