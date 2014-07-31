@@ -32,7 +32,12 @@ if [[ ! -d htdocs ]]
 	fi
 	# Move into htdocs to run 'wp' commands.
 	cd htdocs
-	wp --allow-root core download --version="$wordpressVersion"
+	if [[ "$wordpressVersion" == "trunk" ]]
+		then
+		svn co http://core.svn.wordpress.org/trunk/ .
+	else
+		wp --allow-root core download --version="$wordpressVersion"
+	fi
 	echo "$constants" | wp --allow-root core config --dbname="$siteId" --dbuser="wordpress" --dbpass="wordpress" --dbprefix="$prefix" --extra-php
 	#Install as needed
 	if ! $(wp --allow-root core is-installed)

@@ -42,8 +42,13 @@ module.exports = function (grunt) {
 					['up'],
 					['provision']
 				]
+			},<% if ( 'trunk' === wordpress.version ) { %>
+			svn_up: {
+				commands: [
+					['ssh', '--command=cd /var/sites/<%= site.id %>/htdocs && svn up']
+				]
 			},
-			import_db: {
+<% } %>			import_db: {
 				commands: [
 					['ssh', '--command=cd /var/sites/<%= site.id %> && bash scripts/import-sql.sh']
 				]
@@ -87,7 +92,8 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 	// Register tasks
-	grunt.registerTask('default', ['gitPull', 'vagrant_commands:restart']);
+	grunt.registerTask('default', ['gitPull', 'vagrant_commands:restart']); <% if ( 'trunk' === wordpress.version ) { %>
+	grunt.registerTask('trunk', ['vagrant_commands:svn_up']); <% } %>
 	grunt.registerTask('provision', ['vagrant_commands:restart']);
 	grunt.registerTask('db', ['vagrant_commands:import_db']);
 	grunt.registerTask('plugins', ['vagrant_commands:install_plugins']);
