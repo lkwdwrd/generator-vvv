@@ -37,7 +37,7 @@ Available once yoman has completed to manage the installation's relationship wit
 ````
 $ grunt
 ````
-Runs `git pull` on your theme, plugin, and dependencies repositories. It then runs `vagrant up`, which will have no effect if vagrant is already running, and then `vagrant provision` (see below)
+Runs `git pull` on your theme, plugin, and dependencies repositories. It then runs `vagrant up`, which will have no effect if vagrant is already running, and then `vagrant provision` (see below). If a remote database has been specified, it will download that database again. Note that this will cause your database to be overwritten.
 
 ### provision
 ````
@@ -53,6 +53,12 @@ This command imports any .sql or .sql.gz file it finds in `/config/data/'.
 If vvv.json specifies an original/production URL, it will also run an update db script that runs the wp-cli command `wp search-replace`.
 
 This can be a handy command if you want to switch between databases. For example you have a database that mirrors production and you also have a database with theme unit tests. You can have both sql files in `/config/data/` — to switch, remove the .imported extension and run this command.
+
+### remoteDB
+````
+$ grunt remoteDB
+````
+This command is available if there is a remote database specified in vvv.json. This command will download the remote database. From there it's identical to `grunt db`, above.
 
 ### plugins
 ````
