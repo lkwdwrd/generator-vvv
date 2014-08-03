@@ -16,3 +16,13 @@ Collecting this beforehand will make it easier when you run `vvv:json`.
 Once run, take a second look at the resulting JSON file. This file is also what you'd share with other developers (along with the SQL dump).
 
 Finally, bootstrap the JSON file by running `vvv:json`
+
+## Remote Databases
+To help distribution, a remote .sql database file can be specified by editing vvv.json. This remote .sql file can be at a public URL or behind HTTP basic auth.
+
+Here is an example using http basic auth.
+````
+"remoteDatabase" : {
+	"url": "http://username:password@remote-databases.mysite.com/remote-databases/myproject.sql"
+}
+````

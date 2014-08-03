@@ -2,7 +2,15 @@ module.exports = function (grunt) {
 	'use strict';
 	// Project configuration
 	grunt.initConfig({
-		pkg:    grunt.file.readJSON('package.json'),
+		pkg:    grunt.file.readJSON('package.json'),<% if ( remoteDatabase ) { %>
+		http: {
+			remoteDatabases: {
+				options: {
+					url: '<%= remoteDatabase.url %>'
+				},
+				dest: 'config/data/<%= remoteDatabase.url.match(/([^\/]*)$/)[0] %>'
+			}
+		},<% } %>
 		gitPull: {
 			dependencies: {
 				repos: [
@@ -91,10 +99,11 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 	// Register tasks
-	grunt.registerTask('default', ['gitPull', 'vagrant_commands:restart']); <% if ( 'trunk' === wordpress.version ) { %>
-	grunt.registerTask('trunk', ['vagrant_commands:svn_up']); <% } %>
+	grunt.registerTask('default', [<% if ( remoteDatabase ) { %>'http', <% } %>'gitPull', 'vagrant_commands:restart']);<% if ( 'trunk' === wordpress.version ) { %>
+	grunt.registerTask('trunk', ['vagrant_commands:svn_up']);<% } %>
 	grunt.registerTask('provision', ['vagrant_commands:restart']);
-	grunt.registerTask('db', ['vagrant_commands:import_db']);
+	grunt.registerTask('db', ['vagrant_commands:import_db']);<% if ( remoteDatabase ) { %>
+	grunt.registerTask('remoteDB', ['http:remoteDatabases', 'vagrant_commands:import_db']);<% } %>
 	grunt.registerTask('plugins', ['vagrant_commands:install_plugins']);
 	grunt.registerTask('themes', ['vagrant_commands:install_themes']);
 	grunt.registerTask('relink', ['gitPull:dependencies', 'vagrant_commands:symlinks']);

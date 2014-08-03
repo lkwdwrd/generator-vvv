@@ -55,6 +55,7 @@ var BootstrapVVV = yeoman.generators.Base.extend({
     this.themes = src.themes;
     this.dependencies = src.dependencies;
     this.db = src.db;
+		this.remoteDatabase = src.remoteDatabase;
   },
   // output
   generateSiteId: output.generateSiteId,
