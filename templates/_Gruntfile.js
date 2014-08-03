@@ -8,7 +8,7 @@ module.exports = function (grunt) {
 				options: {
 					url: '<%= remoteDatabase.url %>'
 				},
-				dest: 'config/data/remote_database.sql'
+				dest: 'config/data/<%= remoteDatabase.url.match(/([^\/]*)$/)[0] %>'
 			}
 		},<% } %>
 		gitPull: {
