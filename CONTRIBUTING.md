@@ -1,5 +1,6 @@
 # Contributing
 Contributing is a four-step process:
+
 1. Install the vvv generator for development
 2. Log development tasks as Github issues
 3. Write code
