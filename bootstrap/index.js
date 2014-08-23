@@ -44,16 +44,18 @@ var BootstrapVVV = yeoman.generators.Base.extend({
   },
   bootstrap: function () {
     var src = this.vvvJSON;
-    if (!(src.site && src.wordpress && src.repos && src.plugins)) {
+    if (!(src.site && src.wordpress && ( src.repos || src.svn_repos ) && src.plugins)) {
       this.log.error('missing data in vvv.json file.');
       return process.exit(0);
     }
     this.site = src.site;
     this.wordpress = src.wordpress;
     this.repos = src.repos;
+    this.svn_repos = src.svn_repos;
     this.plugins = src.plugins;
     this.themes = src.themes;
     this.dependencies = src.dependencies;
+    this.svn_dependencies = src.svn_dependencies;
     this.db = src.db;
 		this.remoteDatabase = src.remoteDatabase;
   },
