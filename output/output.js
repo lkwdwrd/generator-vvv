@@ -37,8 +37,10 @@ function src() {
   this.copy('readmes/plugins-readme.md', 'src/plugins/readme.md');
   this.copy('readmes/themes-readme.md', 'src/themes/readme.md');
 
-  this.copy('plugins/object-cache.php', 'src/dropins/object-cache.php');
-  this.copy('plugins/advanced-cache.php', 'src/dropins/advanced-cache.php');
+  if (false !== this.wordpress.cache) {
+    this.copy('plugins/object-cache.php', 'src/dropins/object-cache.php');
+    this.copy('plugins/advanced-cache.php', 'src/dropins/advanced-cache.php');
+  }
 }
 
 function node() {
