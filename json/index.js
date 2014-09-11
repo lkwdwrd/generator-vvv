@@ -28,6 +28,7 @@ var JSONGenerator = yeoman.generators.Base.extend({
   dependencyRepo: prompts.dependencyRepo,
   // output
   generateSiteId: output.generateSiteId,
+  ensureValues: output.ensureValues,
   vvv: output.vvv
 });
 

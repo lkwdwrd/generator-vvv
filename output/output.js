@@ -7,6 +7,16 @@ function generateSiteId() {
   this.site.id = this.site.url.replace(/[^A-Za-z0-9]/g, '').substr(0, 64);
 }
 
+function ensureValues() {
+  this.remoteDatabase = this.remoteDatabase || false;
+  this.site = this.site || {};
+  this.wordpress = this.wordpress || {};
+  this.repos = this.repos || false;
+  this.svn_repos = this.svn_repos || false;
+  this.dependencies = this.dependencies || '';
+  this.svn_dependencies = this.svn_dependencies || '';
+}
+
 function vvv() {
   this.template('_vvv.json', 'vvv.json');
 }
@@ -106,6 +116,7 @@ function sql() {
 
 module.exports = {
   generateSiteId: generateSiteId,
+  ensureValues: ensureValues,
   vvv: vvv,
   config: config,
   src: src,
