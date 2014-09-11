@@ -16,7 +16,7 @@ function config() {
 
   this.mkdir('config/data');
   this.copy('readmes/data-readme.md', 'config/data/readme.md');
-  this.copy('wp-constants', 'config/wp-constants');
+  this.template('_wp-constants', 'config/wp-constants');
   this.template('_org-plugins', 'config/org-plugins');
   this.template('_org-themes', 'config/org-themes');
   this.template('_wp-ms-constants', 'config/wp-ms-constants');
