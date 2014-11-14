@@ -13,7 +13,7 @@ This will take care of:
  - Installing WordPress if you don't already have an `htdocs` folder
  - Setting up your database for the site if needed
  - Importing any new database found in `config/data` and migrating domains if needed
- - Configuing your WordPress install as needed to work with the database
+ - Configuring your WordPress install as needed to work with the database
  - Linking any dropins, themes, or plugins into the correct location
 
-This setup script can be triggerd at any time by running vagrant provision on your friendly neighborhood VVV install, or by re-running `grunt provision` from the project root.
+This setup script can be triggered at any time by running vagrant provision on your friendly neighborhood VVV install, or by re-running `grunt provision` from the project root.
