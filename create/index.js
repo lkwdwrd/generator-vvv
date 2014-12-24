@@ -49,6 +49,7 @@ var VVVCreate = yeoman.generators.Base.extend({
   config: output.config,
   src: output.src,
   node: output.node,
+  tasks: output.tasks,
   scripts: output.scripts,
   findSQL: output.findSQL,
   sql: output.sql
