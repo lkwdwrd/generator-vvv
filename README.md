@@ -61,6 +61,10 @@ The generator uses the JSON file to bootstrap several scripts, clone theme and p
 
 You may now navigate to the development environment domain. It's "URL" in vvv.json. If you don't have Vagrant's autohostupdater plugin installed, you'll need to enter the domain in your hosts file.
 
+## Notes
+### Default Admin Credentials
+Username and password are both **wordpress**
+
 # Documentation
 * [Working on WordPress](docs/working-on-wordpress.md): Editing themes & installing plugins.
 * [Creating a sharable project](docs/creating-a-project.md): In-depth setting up an existing project to make it sharable.
