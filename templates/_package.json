@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "repository": "none",
   "devDependencies": {
+    "glob": "^4.3.2",
     "grunt": "^0.4.5",
     "grunt-gitpull": "^0.1.6",
     "grunt-svn-checkout": "^0.1.1",

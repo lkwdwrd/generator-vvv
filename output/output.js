@@ -55,7 +55,19 @@ function src() {
 
 function node() {
   this.template('_package.json', 'package.json');
+}
+
+function tasks() {
   this.template('_Gruntfile.js', 'Gruntfile.js');
+  if ( this.remoteDatabase ) {
+    this.template('tasks/options/_http.js', 'tasks/options/http.js');
+  }
+  this.template('tasks/options/_gitPull.js', 'tasks/options/gitPull.js');
+  this.template('tasks/options/_svn_checkout.js', 'tasks/options/svn_checkout.js');
+  this.template('tasks/options/_vagrant_commands.js', 'tasks/options/vagrant_commands.js');
+  
+
+  this.template('tasks/_vagrant_commands_task.js', 'tasks/vagrant_commands_task.js');
 }
 
 function scripts() {
@@ -121,6 +133,7 @@ module.exports = {
   config: config,
   src: src,
   node: node,
+  tasks: tasks,
   scripts: scripts,
   findSQL: findSQL,
   sql: sql
