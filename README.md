@@ -12,7 +12,7 @@ You'll need this software to use generator-vvv
 generator-vvv is a companion for [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV). If you aren't using VVV, it has huge benefits for local WordPress development, and we highly recommend it. However, this generator is really only useful for VVV users.
 
 ### Node
-This is a [Yeoman](http://yeoman.io/) generator. Yeoman requires [Node](http://nodejs.org/) 0.8.19 or newer. It also requires Grunt and Yo, but we'll take care of those if you don't already have them.
+This is a [Yeoman](http://yeoman.io/) generator. Yeoman requires [Node](http://nodejs.org/) 4.3.1 or newer. It also requires Grunt and Yo.
 
 Check that Node is installed:
 ````
@@ -20,10 +20,9 @@ $ node -v
 ````
 
 ## Installation
-`npm install -g generator-vvv`
+`npm install -g yo grunt generator-vvv`
 
-We'll then go get a whole bunch of dependencies and you'll get time for a coffee break and a shiny
-new command line tool when you get back.
+We'll then go get a whole bunch of dependencies and you'll get time for a coffee break and a shiny new command line tool when you get back.
 
 _Note:_ if you're intending to contribute code back to the generator, you may want to clone the repo instead. [See the contributing docs for details.](CONTRIBUTING.md)
 

@@ -1,0 +1,9 @@
+path: <%= path %>
+core install:
+	url: <%= url %>
+	title: <%= title %>
+	admin_user: <%= user %>
+	admin_password: <%= pass %>
+	admin_email: <%= email %>
+core multisite-convert:
+	title: <%= title %>
