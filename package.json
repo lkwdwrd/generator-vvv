@@ -33,6 +33,7 @@
     "lodash": "^4.6.0",
     "mkdirp": "^0.5.1",
     "promise": "^7.1.1",
+    "slash": "^1.0.0",
     "valid-url": "^1.0.9",
     "yeoman-generator": "^0.22.5"
   },

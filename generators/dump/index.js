@@ -1,6 +1,7 @@
 var Base = require( '../../lib/base' );
 var _ = require( 'lodash' );
 var path = require( 'path' );
+var slash = require( 'slash' );
 var envParse = require( 'dotenv' ).parse;
 var crypto = require( 'crypto' );
 var chalk = require( 'chalk' );
@@ -47,8 +48,8 @@ module.exports = Base.extend({
 		// Copy and mutate install data into composer json.
 		composer = _.chain( this.install )
 			.assign( this.install.composer )
-			.omit( [ 'in-app', 'site', 'server', 'src', 'composer', 'workingDirectory' ] )
-			.merge( this._processComposerPaths( this.appPaths, 'app' ) )
+			.omit( [ 'in-app', 'app-paths', 'site', 'server', 'src', 'composer', 'workingDirectory' ] )
+			.merge( this._processComposerPaths( this.appPaths, 'app', '.' ) )
 			.value();
 
 		// Write the composer file.
@@ -88,23 +89,25 @@ module.exports = Base.extend({
 			path.join( 'app', paths['composer-path'], 'composer.json' )
 		);
 	},
-	_processComposerPaths: function( paths, root ) {
+	_processComposerPaths: function( paths, root, composerPath ) {
 		root = root || '.';
+		composerPath = composerPath || paths['composer-path'];
 
 		var composerPaths = { extra: { 'installer-paths': {} } },
 			themePath = path.normalize( path.join( root, paths['theme-path'], '{$name}' ) ),
 			pluginPath = path.normalize( path.join( root, paths['plugin-path'], '{$name}' ) ),
 			muPluginPath = path.normalize( path.join( root, paths['mu-plugin-path'], '{$name}' ) ),
 			wpPath = path.normalize( path.join( root, paths['wp-path'] ) ),
-			vendorDir = path.normalize( path.join( root, path.relative( paths['composer-path'], paths['vendor-dir'] ) ) );
+			vendorDir = path.normalize( path.join( root, path.relative( composerPath, paths['vendor-dir'] ) ) );
+
 		// Set up extras
-		composerPaths.extra['wordpress-install-dir'] = wpPath;
-		composerPaths.extra['installer-paths'][ themePath ] = [ 'type:wordpress-theme' ];
-		composerPaths.extra['installer-paths'][ pluginPath ] = [ 'type:wordpress-plugin' ];
-		composerPaths.extra['installer-paths'][ muPluginPath ] = [ 'type:wordpress-muplugin' ];
+		composerPaths.extra['wordpress-install-dir'] = slash( wpPath );
+		composerPaths.extra['installer-paths'][ slash( themePath ) ] = [ 'type:wordpress-theme' ];
+		composerPaths.extra['installer-paths'][ slash( pluginPath ) ] = [ 'type:wordpress-plugin' ];
+		composerPaths.extra['installer-paths'][ slash( muPluginPath ) ] = [ 'type:wordpress-muplugin' ];
 		// set up config as needed
 		if ( 'vendor' !== vendorDir ) {
-			composerPaths.config = { 'vendor-dir': vendorDir };
+			composerPaths.config = { 'vendor-dir': slash( vendorDir ) };
 		}
 
 		return composerPaths;
@@ -180,7 +183,7 @@ module.exports = Base.extend({
 		this._processDump( 'nginx' );
 
 		// Dump the hosts and nginx config files.
-		this.globalTemplate( '_vvv-hosts', 'config/vvv-hosts', {
+		this.globalTemplate( '_vvv-hosts', path.join( 'config', 'vvv-hosts' ), {
 			domains: this._getDomains().join( "\n" )
 		} );
 	},
@@ -198,13 +201,13 @@ module.exports = Base.extend({
 	_dumpNginxConfig: function() {
 		this.globalTemplate( '_vvv-nginx.conf', 'vvv-nginx.conf', {
 			domains: this._getDomains().join( ' ' ),
-			path: path.posix.normalize( path.join( 'app', this.install.server.root || '.' ) ),
+			path: slash( path.normalize( path.join( 'app', this.install.server.root || '.' ) ) ),
 			proxy: !! this.install.server.proxies
 		} );
 		if ( !! this.install.server.proxies ) {
 			this.globalTemplate(
 				'_proxy.conf',
-				'config/proxy.conf',
+				path.join( 'config', 'proxy.conf' ),
 				{
 					proxies: this._normalizeProxies(
 						this.install.server.proxies,
@@ -214,7 +217,7 @@ module.exports = Base.extend({
 				}
 			);
 		} else {
-			this.fs.delete( this.destinationPath( 'config/proxy.conf' ) );
+			this.fs.delete( this.destinationPath( path.join( 'config', 'proxy.conf' ) ) );
 		}
 	},
 	_normalizeProxies: function( proxies, fallbackURL ) {
@@ -293,19 +296,13 @@ module.exports = Base.extend({
 	_dumpWPCLI: function() {
 		// Compile basic data.
 		var data = {
+			path: slash( this.getAppPath( 'wp-path', 'app' ) ),
 			title: this.install.title,
 			url: this.install.server.local,
 			user: this.install.site['admin-user'] || 'admin',
 			pass: this.install.site['admin-pass'] || 'password',
 			email: this.install.site['admin-email'] || 'admin@' + this.install.server.local,
 		};
-
-		// Compile the WP directory path.
-		if ( this.install.composer.app ) {
-			data.path = path.join( 'app', this.install.composer.app['wp-path'] || 'wp' );
-		} else {
-			data.path = path.join( 'app', 'wp' );
-		}
 
 		// Dump the wp-cli.yml file.
 		this.globalTemplate( '_wp-cli.yml', 'wp-cli.yml', data );
