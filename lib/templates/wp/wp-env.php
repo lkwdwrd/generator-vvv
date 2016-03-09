@@ -2,15 +2,16 @@
 /**
  * Loads up the phpdotenv system and bootstraps the environment.
  */
-if ( file_exists( __DIR__ . '/<%= vendorDir %>/autoload.php' ) ) {
-	require_once __DIR__ . '/<%= vendorDir %>/autoload.php';
+
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
 } else {
 	die( '<h1>Composer Not Installed</h1><p>Please run <code>composer install</code> to get started.</p>' );
 }
 
 $dotenv = new Dotenv\Dotenv( __DIR__ );
 $dotenv->load();
-$dotenv->required( [
+$dotenv->required( array(
 	'WPCONST_DB_NAME',
 	'WPCONST_DB_USER',
 	'WPCONST_DB_PASSWORD',
@@ -22,5 +23,5 @@ $dotenv->required( [
 	'WPCONST_SECURE_AUTH_SALT',
 	'WPCONST_LOGGED_IN_SALT',
 	'WPCONST_NONCE_SALT',
-	'TABLE_PREFIX'
-] )->notEmpty();
+	'TABLE_PREFIX',
+) )->notEmpty();

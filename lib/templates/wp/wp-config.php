@@ -17,7 +17,7 @@ array_walk( $_ENV, function( $value, $key ) {
 
 /** MySQL hostname */
 if ( ! defined( 'DB_HOST' ) ) {
-	define( 'DB_HOST', 'localhost' );
+	define( 'DB_HOST', '127.0.0.1' );
 }
 /** Database Charset to use in creating database tables. */
 if ( ! defined( 'DB_CHARSET' ) ) {
