@@ -70,6 +70,7 @@ module.exports = Base.extend({
 
 		projectPath = path.resolve( this.arguments[1] || path.join( this.options.vagrantPath, 'www', manifest.name ) );
 		mkdirp.sync( projectPath );
+		this.destinationRoot( projectPath );
 		process.chdir( projectPath );
 		fs.rename( manifestPath, path.join( projectPath, 'vmanifest.json' ), done );
 	},
