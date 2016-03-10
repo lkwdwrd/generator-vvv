@@ -43,13 +43,14 @@ module.exports = Base.extend({
 		if ( 'vmanifest.json' !== path.basename( manifestPath ) ) {
 			manifestPath = path.join( manifestPath, 'vmanifest.json' );
 		}
+		console.log( manifestPath );
 
 		try {
 			fs.lstatSync( manifestPath );
 		} catch( e ) {
 			try {
+				fs.lstatSync(  path.join( tmpDir, 'vmanifest.json' ) );
 				manifestPath = path.join( tmpDir, 'vmanifest.json' );
-				fs.lstatSync( manifestPath );
 			} catch( e ) {
 				this.log( chalk.red.bold( 'Could not find a manifest file at ' + manifestPath ) );
 				process.exit( 0 );
