@@ -44,20 +44,20 @@ module.exports = Base.extend({
 			taskConfig = this._getStarterTask( 'symlink' );
 
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
-			src: [ 'dropins/*', '*/dropins/*', '*/*', '../config/.protected/*' ],
+			src: [ 'dropins/*', '*/dropins/*', '*/*' ],
 			dest: slash( this.getAppPath( 'content-path', 'app' ) ),
 			filter: 'isFile'
 		} ) );
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
-			src: [ 'plugins/*', '*/plugins/*', '../config/.protected/plugins/*' ],
+			src: [ 'plugins/*', '*/plugins/*' ],
 			dest: slash( this.getAppPath( 'plugin-path', 'app' ) )
 		} ) );
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
-			src: [ 'themes/*', '*/themes/*', '../config/.protected/themes/*' ],
+			src: [ 'themes/*', '*/themes/*' ],
 			dest: slash( this.getAppPath( 'theme-path', 'app' ) )
 		} ) );
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
-			src: [ 'mu-plugins/*', '*/mu-plugins/*', '../config/.protected/mu-plugins/*' ],
+			src: [ 'mu-plugins/*', '*/mu-plugins/*' ],
 			dest: slash( this.getAppPath( 'mu-plugin-path', 'app' ) )
 		} ) );
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
@@ -169,8 +169,8 @@ module.exports = Base.extend({
 	_dumpClean: function() {
 		var taskConfig = this._getStarterTask( 'clean' );
 		// Inject correct content directories
-		taskConfig.content.src.push( slash( this.getAppPath( 'content-path', 'app', '*' ) ) );
-		taskConfig.content.src.push( slash( this.getAppPath( 'content-path', '!app', 'uploads' ) ) );
+		taskConfig.content.src.push( slash( this.getAppPath( 'content-path', 'app', path.join( '*', '*' ) ) ) );
+		taskConfig.content.src.push( slash( this.getAppPath( 'content-path', 'app', path.join( '*', '*', '*' ) ) ) );
 		this.writeTask( taskConfig, 'clean' );
 	},
 	_dumpConfirm: function() {
@@ -179,7 +179,6 @@ module.exports = Base.extend({
 	},
 	_dumpCopy: function() {
 		var taskConfig = this._getStarterTask( 'copy' );
-		taskConfig.protected.cwd = slash( this.getAppPath( 'content-path', 'app' ) );
 		this.writeTask( taskConfig, 'copy' );
 	},
 	allowRun: function(){}
