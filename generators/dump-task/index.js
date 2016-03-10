@@ -6,7 +6,7 @@ var chalk = require( 'chalk' );
 
 module.exports = Base.extend({
 	dumpMap: {
-		'hardlink': '_dumpHardlink',
+		'symlink': '_dumpSymlink',
 		'vagrant_commands': '_dumpVagrantCommands',
 		'src': '_dumpSrcTasks',
 		'clean': '_dumpClean',
@@ -39,9 +39,9 @@ module.exports = Base.extend({
 	_getStarterTask: function( task ) {
 		return require( this.globalTemplatePath( path.join( 'tasks', task + '.js' ) ) );
 	},
-	_dumpHardlink: function() {
+	_dumpSymlink: function() {
 		var basicFiles = { expand: true, cwd: 'src', flatten: true },
-			taskConfig = this._getStarterTask( 'hardlink' );
+			taskConfig = this._getStarterTask( 'symlink' );
 
 		taskConfig.src.files.push( _.assign( _.clone( basicFiles ), {
 			src: [ 'dropins/*', '*/dropins/*', '*/*', '../config/.protected/*' ],
@@ -66,7 +66,7 @@ module.exports = Base.extend({
 			dest: slash( this.getAppPath( 'theme-path', 'app' ) )
 		} ) );
 
-		this.writeTask( taskConfig, 'hardlink' );
+		this.writeTask( taskConfig, 'symlink' );
 	},
 	_dumpVagrantCommands: function() {
 		var taskConfig = this._getStarterTask( 'vagrant_commands' ),

@@ -43,7 +43,6 @@ module.exports = Base.extend({
 		if ( 'vmanifest.json' !== path.basename( manifestPath ) ) {
 			manifestPath = path.join( manifestPath, 'vmanifest.json' );
 		}
-		console.log( manifestPath );
 
 		try {
 			fs.lstatSync( manifestPath );
