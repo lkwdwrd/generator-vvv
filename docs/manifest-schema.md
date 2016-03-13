@@ -1,7 +1,7 @@
 #WPManifest Schema
 
- - [Name](#name) *(str)* *****
- - [Title](#title) *(str)* *****
+ - [Name](#name) *(str)* __*__
+ - [Title](#title) *(str)* __*__
  - [Description](#description) *(str)*
  - [Homepage](#homepage) *(str)*
  - [Site](#site) *(obj)* **\***
