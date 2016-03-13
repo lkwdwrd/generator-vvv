@@ -1,4 +1,44 @@
-#VManifest Schema
+#WPManifest Schema
+
+ - [Name](#name)*
+ - [Title](#title)*
+ - [Description](#description)
+ - [Homepage](#homepage)
+ - [Site](#site)*
+	 - [Prefix](#prefix)
+	 - [Base](#Base)
+	 - [Admin-User](#admin-user)
+	 - [Admin-Pass](#admin-pass)
+	 - [Admin-Email](#admin-email)
+	 - [External-Env](#external-env)
+	 - [Constants](#constants)*
+	 - [Env](#env)
+ - [Server](#server)*
+	 - [Local](#local)*
+	 - [Remote](#remote)
+	 - [Subdomains](#subdomains)
+	 - [Proxies](#proxies)
+		 - [Types](#types)
+		 - [Types-Include](#types-include)
+		 - [Types-Exclude](#types-exclued)
+		 - [Match](#match)
+		 - [Proxies](#proxies-1)
+			 - [Rewrite](#rewrite)
+			 - [URL](#url)
+ - [App-Paths](#app-paths)
+	 - [Composer-Path](#composer-path)
+	 - [Vendor-Dir](#vendor-dir)
+	 - [WP-Path](#wp-path)
+	 - [Content-Path](#content-path)
+	 - [Root](#root)
+ - [Src](#src)*
+	 - [URL](#url-1)
+	 - [Type](#type)
+	 - [Map](#map)
+	 - [Name](#name-1)
+	 - [Stable](#stable)
+ - [Composer](#composer)
+ - [Composer-in-App](#composer-in-app)
 
 ## Name
 

@@ -70,13 +70,13 @@ _Tip:_ If you instead run `$ yo vvv:json` you can create the JSON file without a
 
 ### Default WP Admin Credentials
 
-**username:** admin
-**password:** password
+ - **username:** admin
+ - **password:** password
 
 ### Default Database Credentials
 
-**username:** wordpress
-**password:** wordpress
+ - **username:** wordpress
+ - **password:** wordpress
 
 ### Documentation
 
