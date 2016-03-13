@@ -4,17 +4,17 @@
  - [Title](#title) *(str)* __*__
  - [Description](#description) *(str)*
  - [Homepage](#homepage) *(str)*
- - [Site](#site) *(obj)* **\***
+ - [Site](#site) *(obj)* __*__
 	 - [Prefix](#prefix) *(str)*
 	 - [Base](#base) *(str)*
 	 - [Admin-User](#admin-user) *(str)*
 	 - [Admin-Pass](#admin-pass) *(str)*
 	 - [Admin-Email](#admin-email) *(str)*
 	 - [External-Env](#external-env) *(bool)*
-	 - [Constants](#constants) *(obj)* **\***
+	 - [Constants](#constants) *(obj)* __*__
 	 - [Env](#env) *(obj)*
- - [Server](#server) *(obj)* **\***
-	 - [Local](#local) *(str)* **\***
+ - [Server](#server) *(obj)* __*__
+	 - [Local](#local) *(str)* __*__
 	 - [Remote](#remote) *(str)*
 	 - [Subdomains](#subdomains) *(arr)*
 	 - [Proxies](#proxies) *(obj)*
@@ -31,7 +31,7 @@
 	 - [WP-Path](#wp-path) *(str)*
 	 - [Content-Path](#content-path) *(str)*
 	 - [Root](#root) *(str)*
- - [Src](#src) *(obj)* **\***
+ - [Src](#src) *(obj)* __*__
 	 - [URL](#url-1) *(str)*
 	 - [Type](#type) *(str)*
 	 - [Map](#map) *(str)*
