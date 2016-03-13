@@ -9,7 +9,7 @@ var chalk = require( 'chalk' );
 
 module.exports = Base.extend({
 	dumpMap: {
-		'vmanifest': '_dumpVManifest',
+		'manifest': '_dumpManifest',
 		'composer': '_dumpComposer',
 		'env': '_dumpEnv',
 		'domains': '_dumpDomains',
@@ -32,8 +32,8 @@ module.exports = Base.extend({
 			_.keys( this.dumpMap ).forEach( this._processDump.bind( this ) );
 		}
 	},
-	_dumpVManifest: function() {
-		this.writeJSON( _.omit( this.install, [ 'workingDirectory' ] ), 'vmanifest.json' );
+	_dumpManifest: function() {
+		this.writeJSON( _.omit( this.install, [ 'workingDirectory' ] ), 'wpmanifest.json' );
 	},
 	_dumpComposer: function() {
 		// Localize vars.

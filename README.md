@@ -29,7 +29,7 @@ $ npm -v
 
 If you do not get version number when running the -v commands, [download and install Node](https://nodejs.org/en/download/) for your computer. Once installed, try the commands again. Installing node will also install NPM.
 
-## Installation
+### Installation
 
 To install Generator VVV run:
 
@@ -42,7 +42,7 @@ When the NPM install finishes successfully, you will now have access to the yo v
 _Note:_ if you're intending to contribute code back to the generator, you may want to clone the repo instead. [See the contributing docs for details.](CONTRIBUTING.md)
 
 ## Receiving a wpmanifest.json file
-If you've been lucky enough to be working on a project that already has a vmanifest.json, you're in good shape — and just a few minutes away from a development environment! If the manifest is at a remote URL, simply run `yo vvv:bootstrap <url>` from anywhere on your machine. If you were give the file, run `yo vvv:bootstrap <path>` telling the generator where the file is located. If you do not specify a path it will look in the current working directory.
+If you've been lucky enough to be working on a project that already has a wpmanifest.json, you're in good shape — and just a few minutes away from a development environment! If the manifest is at a remote URL, simply run `yo vvv:bootstrap <url>` from anywhere on your machine. If you were give the file, run `yo vvv:bootstrap <path>` telling the generator where the file is located. If you do not specify a path it will look in the current working directory.
 
 You will find your new install located at `<vvv_directory>/www/<project.name>`.
 

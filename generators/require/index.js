@@ -5,7 +5,7 @@ var path = require( 'path' );
 
 module.exports = Base.extend({
 	_compose: function() {
-		this.composeWith( 'vvv:dump', { arguments: [ 'vmanifest', 'composer' ] } );
+		this.composeWith( 'vvv:dump', { arguments: [ 'manifest', 'composer' ] } );
 	},
 	prompting: function() {
 		if ( ! this.install.composer ) {

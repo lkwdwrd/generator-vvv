@@ -18,14 +18,14 @@ module.exports = Base.extend({
 		this.addRunMethod( 'downloadManifest', this._downloadManifest.bind( this ), 'initializing', 4 );
 		this.addRunMethod( 'processManifest', this._processManifest.bind( this ), 'initializing', 4 );
 		this.addRunMethod( 'getUploads', this._getUploads.bind( this ), 'configuring' );
-		this.removeRunMethod( 'dump:vmanifest', 'writing' );
+		this.removeRunMethod( 'dump:manifest', 'writing' );
 	},
 	_downloadManifest: function( done ) {
 		var manifest = this.arguments[0] || '.',
 			manifestRemote = isURI( manifest );
 
 		try{
-			fs.unlinkSync( path.join( tmpDir, 'vmanifest.json' ) );
+			fs.unlinkSync( path.join( tmpDir, 'wpmanifest.json' ) );
 		} catch( e ) {
 			// File isn't there, no problem.
 		}
@@ -40,16 +40,16 @@ module.exports = Base.extend({
 		var manifest, projectPath,
 			manifestPath = path.resolve( this.arguments[0] || '.' );
 
-		if ( 'vmanifest.json' !== path.basename( manifestPath ) ) {
-			manifestPath = path.join( manifestPath, 'vmanifest.json' );
+		if ( 'wpmanifest.json' !== path.basename( manifestPath ) ) {
+			manifestPath = path.join( manifestPath, 'wpmanifest.json' );
 		}
 
 		try {
 			fs.lstatSync( manifestPath );
 		} catch( e ) {
 			try {
-				fs.lstatSync(  path.join( tmpDir, 'vmanifest.json' ) );
-				manifestPath = path.join( tmpDir, 'vmanifest.json' );
+				fs.lstatSync(  path.join( tmpDir, 'wpmanifest.json' ) );
+				manifestPath = path.join( tmpDir, 'wpmanifest.json' );
 			} catch( e ) {
 				this.log( chalk.red.bold( 'Could not find a manifest file at ' + manifestPath ) );
 				process.exit( 0 );
@@ -72,7 +72,7 @@ module.exports = Base.extend({
 		mkdirp.sync( projectPath );
 		this.destinationRoot( projectPath );
 		process.chdir( projectPath );
-		fs.rename( manifestPath, path.join( projectPath, 'vmanifest.json' ), done );
+		fs.rename( manifestPath, path.join( projectPath, 'wpmanifest.json' ), done );
 	},
 	_getUploads: function( done ) {
 		if ( ! this.install.uploads ) {

@@ -37,7 +37,7 @@ $ yo vvv:dump [items...]
 
 This command reprocesses the `wpmanifest.json` file of the selected install and recreates different project files depending on what `items` were passed. You can dump the following items:
 
- - **vmanifest** - Dumps the manifest file (used internally).
+ - **manifest** - Dumps the manifest file (used internally).
  - **composer** - Dumps the composer JSON file in the root and the app if not disabled.
  - **env** - Dumps the .env file with the defined constants and environment variables.
  - **domains** - Dumps the hosts file and nginx config so new hosts are recongnized.
@@ -126,6 +126,6 @@ Cleans symlinks out of the content repository, trigges the `grunt pull` task to 
 ````
 $ grunt cleanup
 ````
-This removes _everything_ that generator-vvv created _except_ vmanifest.json and any local databases. It creates a DB snapshot before removing all of the files.
+This removes _everything_ that generator-vvv created _except_ wpmanifest.json and any local databases. It creates a DB snapshot before removing all of the files.
 
 If you'd like to re-create the install from scratch, you can immediately run `yo vvv:bootstrap`. It's worth noting the first found sql file will be used for the import, so it's best to make sure backup created on cleanup is the first or only .sql or .sql.gz file in the directory.

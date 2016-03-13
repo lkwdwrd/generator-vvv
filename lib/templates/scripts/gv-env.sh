@@ -24,19 +24,19 @@ if [ -f "$GVDIR/app/.env" ]
 fi
 
 #Get URL data directly from the JSON
-GVLOCALURL=$( echo "console.log(require('./vmanifest.json').server.local);" | node )
+GVLOCALURL=$( echo "console.log(require('./wpmanifest.json').server.local);" | node )
 if [ "$GVLOCALURL" == "undefined" ] || [ "$GVLOCALURL" == "false" ]
   then
   GVLOCALURL=$(false)
 fi
 
-GVREMOTEURL=$( echo "console.log(require('./vmanifest.json').server.remote);" | node )
+GVREMOTEURL=$( echo "console.log(require('./wpmanifest.json').server.remote);" | node )
 if [ "$GVREMOTEURL" == "undefined" ] || [ "$GVLOCALURL" == "false" ]
   then
   GVREMOTEURL=$(false)
 fi
 
-GVSUBDOMAINS=($( echo "var sub = require('./vmanifest.json').server.subdomains; console.log( sub instanceof Array ? sub.join( ' ' ) : false );" | node ))
+GVSUBDOMAINS=($( echo "var sub = require('./wpmanifest.json').server.subdomains; console.log( sub instanceof Array ? sub.join( ' ' ) : false );" | node ))
 if [ "$GVSUBDOMAINS" == "undefined" ] || [ "$GVSUBDOMAINS" == "false" ]
   then
   GVSUBDOMAINS=$(false)
