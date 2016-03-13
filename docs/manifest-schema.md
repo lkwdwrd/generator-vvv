@@ -88,7 +88,7 @@
 
 **Required.** *(object)* The constants object contains key-value pairs that will be defined as WordPress constants when the site is loaded. Most of the default WordPress constant values can be omitted and will be set to default values. The notable exception is the DB_NAME constant. This should always be defined in the JSON file. This constant is used in many places as a breadcrumb to refer to this install. Any constant can be defined in the constants object as needed.
 
- - **DB_NAME** *(required)* The name of the database. This constant can only contain upper and lower case letters, numbers, and underscores.
+ - **DB_NAME** *(required)* The name of the database. This constant can only contain upper and lower case letters, numbers, and underscores. This item is also used in several places in the build refer to this install with a character-limited unique string.
  - **DB_USER** The name of the user that will access the database for this install. Defaults to 'wordpress'.
  - **DB_PASSWORD** The password for the user that will access the database for this install. Defaults to 'wordpress'.
  - **Keys and Salts** All of the WP required keys and salts (AUTH\_KEY, NONCE\_SALT, etc.). These will automatically be generated when creating the site and do not need to be defined, however they can be if a specific value is required.
