@@ -77,8 +77,10 @@ module.exports = Base.extend({
 		if ( 0 < this.install.src.length ) {
 			for( i = 0, length = this.install.src.length; i < length; i++ ) {
 				if ( -1 !== sourcesWhitlist.indexOf( this.install.src[ i ].map ) ) {
-					composer.repositories.push( _.pick( this.install.src[ i ], [ 'type', 'url' ] ) );
-					composer.require[ this.install.src[ i ].name ] = this.install.src[ i ].stable;
+					if ( this.install.src[ i ].name ) {
+						composer.repositories.push( _.pick( this.install.src[ i ], [ 'type', 'url' ] ) );
+						composer.require[ this.install.src[ i ].name ] = this.install.src[ i ].stable;
+					}
 				}
 			}
 		}

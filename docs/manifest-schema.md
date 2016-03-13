@@ -205,19 +205,21 @@
  - **root** - The root of the site. This may version control the entire install for git deploy on something like WP Engine or Pantheon, or it may define the bare bones of the install with a `composer.json` file that will pull in the needed dependencies. Unlike the other types, there can be only one root reposotiroy. Only the first definition will be used, any further root definitions will be ignored. The root repository is checked out to the `app/` folder.
  - **content** - This folder mirros the wp-content folder. Inside it can contain drop-in files (note that drop ins can also be defined in a `dropins/` folder if desired), `plugins/`, `themes/`, and `mu-plugins/` as needed.
  - **plugin** - A WordPress plugin.
- - **mu-plugin** - A WordPress mu-plugin.
  - **theme** - A WordPress theme.
+ - **muplugin** - A WordPress mu-plugin.
+ - **dropin** - A WordPress dropin file.
+ - **vip** - A VIP resource to go in `wp-content/themes/vip/`.
  - **plugins-folder** - A repo full of WordPress plugins in subdirectories (think version controlling `wp-content/plugins`).
  - **themes-folder** - A repo full of WordPress themes in subdirectories (think version controlling `wp-content/themes`).
  - **mu-plugins-folder** - A repo full of WordPress MU plugins in subdirectories (think version controlling `wp-content/mu-plugins`).
 
 ### Name
 
-*(string)* The Composer name for a theme/plugin/mu-plugin. This key should be omitted for other map types. When the app Composer file is dumped, it will include these repository definitions and require this name.
+*(string)* The Composer name for a theme/plugin/muplugin. This key should be omitted for other map types. When the app Composer file is dumped, it will include these repository definitions and require this name.
  
 ### Stable
 
-*(string)* This defines the stable version of this package for deployment. This is used in the app Composer file for theme/plugin/mu-plugin map types. This key should be omitted for other map types.
+*(string)* This defines the stable version of this package for deployment. This is used in the app Composer file for theme/plugin/muplugin map types. This key should be omitted for other map types.
 
 ## Composer
 
