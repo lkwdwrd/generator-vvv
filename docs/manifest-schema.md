@@ -90,12 +90,16 @@
 
  - **DB_NAME** *(required)* The name of the database. This constant can only contain upper and lower case letters, numbers, and underscores.
  - **DB_USER** The name of the user that will access the database for this install. Defaults to 'wordpress'.
- - **DB_PASSWORD** The password for the user taht will access the database for this install. Defaults to 'wordpress'.
- - **Keys and Salts** All of the WP required keys and salts (AUTH_KEY, NONCE_SALT, etc.). These will automatically be generated when creating the site and do not need to be defined, however they can be if a specific value is required.
+ - **DB_PASSWORD** The password for the user that will access the database for this install. Defaults to 'wordpress'.
+ - **Keys and Salts** All of the WP required keys and salts (AUTH\_KEY, NONCE\_SALT, etc.). These will automatically be generated when creating the site and do not need to be defined, however they can be if a specific value is required.
 
 ### Env
 
-*(object)* Any extra environment variables that should be defined for the application. These get output to the .evn file and loaded by default using [phpdotenv](https://github.com/vlucas/phpdotenv).
+*(object)* Any extra environment variables that should be defined for the application. These get output to the .env file and loaded by default using [phpdotenv](https://github.com/vlucas/phpdotenv). These environment variable are also loaded into the boostrapping shell environment in the VM when running internal commands. There are a few extra environment variables there that are useful to know to customize how the site is set up and run.
+
+ - **BUILD_DIR** The directory to run the build script out of. This is relative to the root project directory (not `app/`).
+ - **BUILD_COMMAND** The command to run to build the site. If not specified this will run composer install/update on the root composer file.
+ - **$SUPPRESS\_URL\_CONVERSION** set to true to stop the DB search-replace from occuring after DB import.
 
 ## Server
 
