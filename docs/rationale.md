@@ -4,9 +4,10 @@ Working in a WordPress agency has some amazing benefits: the close and constant 
 
 This is great until you realize that it can take _hours_ for a developer to collect all the resources necessary to create a development environment: Theme repositories, plugins, databases, and configuration details.
 
-Instead of having to communicate these details and let the developer churn through them, we thought it would be awesome to represent each project using a single json file. A lightweight json file can be easily passed around. Development environment ramp-up is reduced to two steps:
+Instead of having to communicate these details and let the developer churn through them, we thought it would be awesome to represent each project using a single json file. A lightweight json file can be easily passed around. Development environment ramp-up is reduced to one step:
 
-1. Put vvv.json into a folder
-2. `cd` into that folder and run `yo vvv:bootstrap`
+```
+yo vvv:boostrap https://gist.github.com/lkwdwrd/raw/vmanifest.json
+```
 
-After step two, the site is running on VVV, including host file mapping, databases, all of it. Hours of developer on-boarding is reduced to minutes. Developers will be able to hop in and out of projects faster than ever. Collaboration becomes effortless.
+After running the command the site is running on the guest machine, including host file mapping, databases, all of it. Hours of developer on-boarding is reduced to minutes. Developers will be able to hop in and out of projects faster than ever. Collaboration becomes effortless.

@@ -1,30 +1,31 @@
 # How to work on a WordPress Site
 
-In a nutshell:
-* Every theme and plugin you want to work on should be in its own git repo
-* Every wordpress.org plugin and theme are specified in vvv.json
-* 3rd party themes and plugins are kept all together in a dependencies repository
+## The Default Setup
 
-## Editing a theme or plugin
-Theme and plugin repositories are defined in vvv.json. There are some requirements:
-* It must be a git repository.
-* The computer running `yo vvv:bootstrap` must be able to access the repository.
+The default WP setup is done in such a way as to bring it somewhat inline with the [12-factor app](http://12factor.net/) method of working on projects. It uses composer to install WordPress and manage/version lock dependencies. It uses [phpdotenv](https://github.com/vlucas/phpdotenv) to configure WordPress and keep sensitive credentials out of the app itself and version control.
 
-Once vvv.json has been bootstrapped, you'll find those themes and plugins have been cloned into the `/src/` directory. They are also symlinked into `htdocs/wp-content`. You may interact with those repositories as you normally would.
+WordPress itself is managed as a dependency. The content folder lives along side the WordPress folder to keep the separations of concerns very clear when working with the system. 
 
-### Adding a new 1st party theme or plugin — something you're working on.
-1. Add the git repository url to vvv.json
-1. Clone the plugin or theme into the appropriate directory in `/src/`
-2. Run `grunt relink` to symlink the new files into `htdocs/wp_content`
+A `composer.json` file is included in the file root. If working only on directly version controlled plugins and themes, this app root can be version controlled itself. Deployment then looks like checking out the root repository to a server and running composer install. As long as the deployment environement is set up with the correct environment variables, it's ready to go. The entire application becomes very [disposable](http://12factor.net/disposability).
 
-## Installing WordPress.org theme or plugin
-1. Add the plugin or theme slug to the appropriate entry in vvv.json
-1. Add the plugin or theme slug to the appropriate file. Either `/config/org-plugins` or `/config/org-themes`
-1. Run `grunt plugins` or `grunt themes` respectively.
+## Editing a Source
 
-## Installing 3rd party, including commercial, themes or plugins
-Not every theme or plugin can be represented by a git url or a wordpress.org slug. Especially commercial themes and plugins. To manage all these dependencies, we can store all the 3rd party themes and plugins in a single git repository.
+Sources are git or Subversion repositories that are actively being worked on as part of this project. Once bootstrapped, you'll find the sources have been cloned/checked out into the `/src/` directory. They are then symlinked into content directory so they are available to the install. You may interact with those repositories in the `src/` directory as you normally would. This keeps the dependency files and the code being worked on very serparated. While working on a project, you should never find yourself modifying a file in the `app/` directory. If you do, take a step back and determine why it is necessary and try to find a way to do it in a source directory instead.
 
-That single repository is then specified in vvv.json. Inside the depdencies repository is a directory for `/themes/`. '/plugins/`, and '/dropins/'. Themes and plugins are symlinked to their respective folders in `/htdocs/wp-content/`. Drop in files are symlinked to `/htdocs/wp-content/` and are best used for custom sunrise or caching files.
+Too add new sources to the project, simply follow the prompts after running:
 
-If vvv.json has already run, you can still add new dependencies. Add them to the dependencies repository first, then run `grunt relink`
+```
+$ yo vvv:source
+```
+
+## Adding Dependencies
+
+To a dependency to your project follow the prompts after runnin:
+
+```
+$ yo vvv:require
+```
+
+Dependencies in general should be a WordPress plugin, theme, or mu-plugin. These should be located in a WordPress.org repository, on Packagist, as a remotely stored zip archive or tar ball, or in a git or subversion repository.
+
+Commercial plugins and themes can typically be turned into a tarball and added to a protected URL so they are available for checkout when the project is shared or deployed.

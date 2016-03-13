@@ -150,7 +150,10 @@ module.exports = Base.extend({
 		this.fs.write( path.join( envPath, '.env.example' ), this._envToString( envExample ) );
 	},
 	_envToString: function ( envObj ) {
-		return _.map( envObj, function ( item, key ) { return key + '=' + item; } ).join( "\n" );
+		return _.map( envObj, function ( item, key ) {
+			item = ( 'true' === '' + item || 'false' === '' + item ) ? item : '"' + item + '"';
+			return key + '=' + item;
+		} ).join( "\n" );
 	},
 	_generateSalts: function ( envObj, genFunc ) {
 		var keys = [
@@ -310,9 +313,7 @@ module.exports = Base.extend({
 	_dumpPackage: function() {
 		this.writeJSON( {
 			name: this.install.site.constants.DB_NAME,
-			version: this.install.version,
 			description: this.install.description,
-			license: this.install.license,
 			main: 'Gruntfile.js',
 			scripts: {
 				test: 'echo "Error: no test specified" && exit 1'
