@@ -1,44 +1,44 @@
 #WPManifest Schema
 
- - [Name](#name)*
- - [Title](#title)*
- - [Description](#description)
- - [Homepage](#homepage)
- - [Site](#site)*
-	 - [Prefix](#prefix)
-	 - [Base](#Base)
-	 - [Admin-User](#admin-user)
-	 - [Admin-Pass](#admin-pass)
-	 - [Admin-Email](#admin-email)
-	 - [External-Env](#external-env)
-	 - [Constants](#constants)*
-	 - [Env](#env)
- - [Server](#server)*
-	 - [Local](#local)*
-	 - [Remote](#remote)
-	 - [Subdomains](#subdomains)
-	 - [Proxies](#proxies)
-		 - [Types](#types)
-		 - [Types-Include](#types-include)
-		 - [Types-Exclude](#types-exclued)
-		 - [Match](#match)
-		 - [Proxies](#proxies-1)
-			 - [Rewrite](#rewrite)
-			 - [URL](#url)
- - [App-Paths](#app-paths)
-	 - [Composer-Path](#composer-path)
-	 - [Vendor-Dir](#vendor-dir)
-	 - [WP-Path](#wp-path)
-	 - [Content-Path](#content-path)
-	 - [Root](#root)
- - [Src](#src)*
-	 - [URL](#url-1)
-	 - [Type](#type)
-	 - [Map](#map)
-	 - [Name](#name-1)
-	 - [Stable](#stable)
- - [Composer](#composer)
- - [Composer-in-App](#composer-in-app)
+ - [Name](#name) *(str)* **\***
+ - [Title](#title) *(str)* **\***
+ - [Description](#description) *(str)*
+ - [Homepage](#homepage) *(str)*
+ - [Site](#site) *(obj)* **\***
+	 - [Prefix](#prefix) *(str)*
+	 - [Base](#base) *(str)*
+	 - [Admin-User](#admin-user) *(str)*
+	 - [Admin-Pass](#admin-pass) *(str)*
+	 - [Admin-Email](#admin-email) *(str)*
+	 - [External-Env](#external-env) *(bool)*
+	 - [Constants](#constants) *(obj)* **\***
+	 - [Env](#env) *(obj)*
+ - [Server](#server) *(obj)* **\***
+	 - [Local](#local) *(str)* **\***
+	 - [Remote](#remote) *(str)*
+	 - [Subdomains](#subdomains) *(arr)*
+	 - [Proxies](#proxies) *(obj)*
+		 - [Types](#types) *(arr)*
+		 - [Types-Include](#types-include) *(arr)*
+		 - [Types-Exclude](#types-exclude) *(arr)*
+		 - [Match](#match) *(str)*
+		 - [Proxies](#proxies-1) *(arr)*
+			 - [Rewrite](#rewrite) *(str)*
+			 - [URL](#url) *(str)*
+ - [App-Paths](#app-paths) *(obj)*
+	 - [Composer-Path](#composer-path) *(str)*
+	 - [Vendor-Dir](#vendor-dir) *(str)*
+	 - [WP-Path](#wp-path) *(str)*
+	 - [Content-Path](#content-path) *(str)*
+	 - [Root](#root) *(str)*
+ - [Src](#src) *(obj)* **\***
+	 - [URL](#url-1) *(str)*
+	 - [Type](#type) *(str)*
+	 - [Map](#map) *(str)*
+	 - [Name](#name-1) *(str)*
+	 - [Stable](#stable) *(str)*
+ - [Composer](#composer) *(obj)*
+ - [Composer-in-App](#composer-in-app) *(bool)*
 
 ## Name
 
