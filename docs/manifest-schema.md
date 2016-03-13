@@ -74,11 +74,11 @@
 
 ### Admin-Pass
 
-*(string)* The admin user name to use when installing the site from scratch. This gets placed into the `wp-cli.yml` file that controls the `$ wp core install` command when it's run. If a database is supplied, this key is not used. Default: password
+*(string)* The admin user password to use when installing the site from scratch. This gets placed into the `wp-cli.yml` file that controls the `$ wp core install` command when it's run. If a database is supplied, this key is not used. Default: password
 
 ### Admin-Email
 
-*(string)* The admin user name to use when installing the site from scratch. This gets placed into the `wp-cli.yml` file that controls the `$ wp core install` command when it's run. If a database is supplied, this key is not used. Default: admin@<server.local>.
+*(string)* The admin user email to use when installing the site from scratch. This gets placed into the `wp-cli.yml` file that controls the `$ wp core install` command when it's run. If a database is supplied, this key is not used. Default: admin@<server.local>.
 
 ### External-Env
 
