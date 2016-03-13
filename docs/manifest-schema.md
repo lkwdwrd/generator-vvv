@@ -97,9 +97,9 @@
 
 *(object)* Any extra environment variables that should be defined for the application. These get output to the .env file and loaded by default using [phpdotenv](https://github.com/vlucas/phpdotenv). These environment variable are also loaded into the boostrapping shell environment in the VM when running internal commands. There are a few extra environment variables there that are useful to know to customize how the site is set up and run.
 
- - **BUILD_DIR** The directory to run the build script out of. This is relative to the root project directory (not `app/`).
- - **BUILD_COMMAND** The command to run to build the site. If not specified this will run composer install/update on the root composer file.
- - **$SUPPRESS\_URL\_CONVERSION** set to true to stop the DB search-replace from occuring after DB import.
+ - **BUILD\_DIR** The directory to run the build script out of. This is relative to the root project directory (not `app/`).
+ - **BUILD\_COMMAND** The command to run to build the site. If not specified this will run composer install/update on the root composer file.
+ - **SUPPRESS\_URL\_CONVERSION** set to true to stop the DB search-replace from occuring after DB import.
 
 ## Server
 
