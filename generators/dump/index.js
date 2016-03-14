@@ -116,7 +116,7 @@ module.exports = Base.extend({
 	},
 	_dumpEnv: function() {
 		// Localize vars
-		var env, envExample, basicItems, salts,
+		var env, envExample, basicItems, defaultConstants, salts,
 			envPath = this.destinationPath( ( this.install.site['external-env'] ) ? '.' : 'app' );
 
 		// Compile basic items into an object.
@@ -128,6 +128,12 @@ module.exports = Base.extend({
 			basicItems.INSTALL_BASE = this.install.site.base || '/';
 		}
 
+		// Default Constants
+		defaultConstants = {
+			WPCONST_DB_USER: 'wordpress',
+			WPCONST_DB_PASSWORD: 'wordpress',
+		};
+
 		// Set up salts
 		try {
 			salts = this._generateSalts( envParse( this.fs.read( path.join( envPath, '.env' ) ) ) );
@@ -138,9 +144,10 @@ module.exports = Base.extend({
 		// Compile the environment file string.
 		env = _.chain( this.install.site.constants )
 			.mapKeys( function ( item, key ) { return 'WPCONST_' + key; } )
+			.defaults( defaultConstants )
 			.assign( basicItems )
 			.assign( this.install.site.env )
-			.assign( salts )
+			.defaults( salts )
 			.value();
 
 
@@ -206,7 +213,7 @@ module.exports = Base.extend({
 	_dumpNginxConfig: function() {
 		this.globalTemplate( '_vvv-nginx.conf', 'vvv-nginx.conf', {
 			domains: this._getDomains().join( ' ' ),
-			path: slash( path.normalize( path.join( 'app', this.install.server.root || '.' ) ) ),
+			path: slash( this.getAppPath( 'root', 'app' ) ),
 			proxy: !! this.install.server.proxies
 		} );
 		if ( !! this.install.server.proxies ) {

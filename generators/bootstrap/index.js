@@ -69,6 +69,15 @@ module.exports = Base.extend({
 		}
 
 		projectPath = path.resolve( this.arguments[1] || path.join( this.options.vagrantPath, 'www', manifest.name ) );
+		if ( ! this._isPathInVVV( projectPath ) ) {
+			this.log( chalk.red.bold( 'That destination path is not in the VVV directory!' ) );
+			this.log( '' );
+			this.log( chalk.red( 'You might try...') );
+			this.log( chalk.red( '  * Moving to a directory one or two levels deep in the VVV www/ folder.' ) );
+			this.log( chalk.red( '  * Not specifying a directory and allowing the generator to create one.' ) );
+			process.exit( 0 );
+		}
+
 		mkdirp.sync( projectPath );
 		this.destinationRoot( projectPath );
 		process.chdir( projectPath );

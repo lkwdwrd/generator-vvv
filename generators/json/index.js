@@ -1,5 +1,8 @@
 'use strict';
 var Base = require( '../../lib/base' );
+var path = require( 'path' );
+var mkdirp = require( 'mkdirp' );
+var _ = require( 'lodash' );
 
 module.exports = Base.extend({
 	description: 'another test',
@@ -11,13 +14,13 @@ module.exports = Base.extend({
 	_initialize: function() {
 		this.removeRunMethod( 'selectInstall', 'initializing', 7 );
 		this.removeRunMethod( 'setUpAppPaths', 'initializing', 9 );
-		this.addRunMethod( 'initInstall', this._initInstall, 'initializing', 2 );
+		this.addRunMethod( 'initInstall', this._initInstall, 'initializing' );
 		this.addRunMethod( 'advOptions', this._advancedOptions, 'prompting' );
 		this.addRunMethod( 'setupInstall', this._setupInstall, 'configuring' );
 		this.addRunMethod( 'setUpAppPaths', this.setUpAppPaths, 'configuring' );
 	},
 	_initInstall: function( done ) {
-		this.install = {
+		_.assign( this.install , {
 			name: '',
 			title: '',
 			description: '',
@@ -39,10 +42,18 @@ module.exports = Base.extend({
 					'johnpbloch/wordpress': '*'
 				}
 			}
-		};
+		} );
 		done();
 	},
 	_setupInstall: function( done ) {
+		var projectPath = path.resolve(
+			this.arguments[0] ||
+			path.join( this.options.vagrantPath, 'www', this.install.name )
+		);
+		mkdirp.sync( projectPath );
+		this.destinationRoot( projectPath );
+		process.chdir( projectPath );
+		this.rcConfig.refresh();
 		done();
 	},
 	_advancedOptions: function( done ) {

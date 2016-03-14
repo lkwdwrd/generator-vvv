@@ -5,4 +5,5 @@ cleanup(){
   rm_executable
   rm_nginx_conf $GVDIR
   rm_vhosts
+  nginx_restart
 }
