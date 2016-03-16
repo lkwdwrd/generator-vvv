@@ -11,6 +11,8 @@ require_once __DIR__ . '/wp-env.php';
 /** Define WordPress constants for this environment. */
 array_walk( $_ENV, function( $value, $key ) {
 	if ( 0 === strpos( $key, 'WPCONST_' ) ) {
+		$value = ( 'true' === $value ) ? true : $value;
+		$value = ( 'false' === $value ) ? false : $value;
 		define( substr( $key, 8 ), $value );
 	}
 } );
@@ -41,40 +43,13 @@ if ( defined( 'MULTISITE' ) && MULTISITE ) {
 }
 
 /**
- * Define site URL constants as needed
- *
- * This helps ensure the correct file paths for the WordPress files which are
- * stored in a sub-director. It should be noted that this removes the ability
- * to change these values in the admin area, but really they should not be
- * changed there anyway, and this works dynamically based on the set config
- * files. If changes are needed, it should be done at a config level, not
- * at a database level.
- *
- * Note that WP_SITEURL is where the wordpress core files live and WP_HOME is
- * where the site home is.
- *
- * You can define these in the .env files if different values are required,
- * but this will set up the default location for them automatically.
- */
-if ( ! defined( 'WP_HOME' ) && isset( $_SERVER['SERVER_NAME'] ) ) {
-	$protocol = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) ? 'https' : 'http';
-	define( 'WP_HOME', $protocol . '://' . $_SERVER['SERVER_NAME'] );
-}
-if ( ! defined( 'WP_SITEURL' ) && defined( 'WP_HOME' ) ) {
-	define( 'WP_SITEURL', WP_HOME . '/<%= wpPath %>' );
-}
-
-/**
- * Define content directory and urls as needed.
+ * Define content directory as needed.
  *
  * You can define these as environment constants if desired, but if not defined
  * this will set up the default location for them automatically.
  */
 if ( ! defined( 'WP_CONTENT_DIR' ) ) {
 	define( 'WP_CONTENT_DIR', __DIR__ . '/<%= contentPath %>' );
-}
-if ( ! defined( 'WP_CONTENT_URL' ) && defined( 'WP_HOME' ) ) {
-	define( 'WP_CONTENT_URL', WP_HOME . '/<%= contentPath %>' );
 }
 
 /** Absolute path to the WordPress directory. */

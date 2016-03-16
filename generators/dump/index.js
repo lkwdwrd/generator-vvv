@@ -211,11 +211,23 @@ module.exports = Base.extend({
 		}
 	},
 	_dumpNginxConfig: function() {
-		this.globalTemplate( '_vvv-nginx.conf', 'vvv-nginx.conf', {
+		var rewriteBase = path.relative( this.getAppPath( 'root' ), this.getAppPath( 'wp-path' ) ),
+		templateVars = {
+			subdomain: this.install.site.constants.SUBDOMAIN_INSTALL,
 			domains: this._getDomains().join( ' ' ),
 			path: slash( this.getAppPath( 'root', 'app' ) ),
-			proxy: !! this.install.server.proxies
-		} );
+			rewrite: ( '.' === rewriteBase ) ? '' : rewriteBase,
+			proxy: !! this.install.server.proxies,
+			phpver: this.install.server['php-version'] || false
+		};
+		this.globalTemplate( '_vvv-nginx.conf', 'vvv-nginx.conf', templateVars );
+		if ( templateVars.rewrite ) {
+			this.globalTemplate(
+				'_rewrites.conf',
+				path.join( 'config', 'rewrites.conf' ),
+				templateVars
+			);
+		}
 		if ( !! this.install.server.proxies ) {
 			this.globalTemplate(
 				'_proxy.conf',
@@ -314,6 +326,8 @@ module.exports = Base.extend({
 			user: this.install.site['admin-user'] || 'admin',
 			pass: this.install.site['admin-pass'] || 'password',
 			email: this.install.site['admin-email'] || 'admin@' + this.install.server.local,
+			base: this.install.site.base || '/',
+			subdomains: this.install.site.constants.SUBDOMAIN_INSTALL || false
 		};
 
 		// Dump the wp-cli.yml file.

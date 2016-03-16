@@ -1,19 +1,11 @@
 #!/bin/bash
 wp_install(){
   #Install as needed
-  if ! $(wp --allow-root core is-installed)
+  if [[ $WPCONST_MULTISITE ]] && ! $(wp --allow-root core is-installed --network > /dev/null 2>&1)
+    then
+    wp --allow-root core multisite-install
+  elif ! $(wp --allow-root core is-installed > /dev/null 2>&1)
     then
     wp --allow-root core install
-    #Multisite stuff
-    if [[ $WPCONST_MULTISITE ]]
-      then
-      # Configure the network
-      if [[ $WPCONST_SUBDOMAIN_INSTALL ]]
-        then
-        wp --allow-root core multisite-convert --subdomains
-      else
-        wp --allow-root core multisite-convert
-      fi
-    fi
   fi
 }
