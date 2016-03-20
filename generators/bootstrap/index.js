@@ -22,19 +22,22 @@ module.exports = Base.extend({
 	},
 	_downloadManifest: function( done ) {
 		var manifest = this.arguments[0] || '.',
-			manifestRemote = isURI( manifest );
+			httpManifest = isURI( manifest );
 
 		try{
 			fs.unlinkSync( path.join( tmpDir, 'wpmanifest.json' ) );
-		} catch( e ) {
-			// File isn't there, no problem.
-		}
+		} catch( e ) { /* File isn't there, no problem. */ }
 
-		if ( ! manifestRemote ) {
+		if ( ! httpManifest && 'scp' !== this.options.type ) {
 			return done();
 		}
 
-		this.fetch( manifest, tmpDir, done );
+		this.download( manifest, tmpDir )
+			.then( done )
+			.catch( function( err ){
+				this.log( err.message );
+				process.exit( 0 );
+			}.bind( this ));
 	},
 	_processManifest: function( done ) {
 		var manifest, projectPath,
