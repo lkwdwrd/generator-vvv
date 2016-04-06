@@ -214,12 +214,16 @@ module.exports = Base.extend({
 		var rewriteBase = path.relative( this.getAppPath( 'root' ), this.getAppPath( 'wp-path' ) ),
 		templateVars = {
 			subdomain: this.install.site.constants.SUBDOMAIN_INSTALL,
-			domains: this._getDomains().join( ' ' ),
+			domain: this.install.server.local,
 			path: slash( this.getAppPath( 'root', 'app' ) ),
 			rewrite: ( '.' === rewriteBase ) ? '' : rewriteBase,
 			proxy: !! this.install.server.proxies,
 			phpver: this.install.server['php-version'] || false
 		};
+		// Support wildcard subdomains in subdomain multisite.
+		if ( templateVars.subdomain ) {
+			templateVars.domain += ' *.' + this.install.server.local;
+		}
 		this.globalTemplate( '_vvv-nginx.conf', 'vvv-nginx.conf', templateVars );
 		if ( templateVars.rewrite ) {
 			this.globalTemplate(
