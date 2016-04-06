@@ -13,6 +13,7 @@ module.exports = Base.extend({
 	_compose: function() {
 		this.composeWith( 'vvv:dump', { arguments: [ 'all' ] } );
 		this.composeWith( 'vvv:dump-task', { arguments: [ 'all' ] } );
+		this.composeWith( 'vvv:pull', { arguments: [ 'uploads', 'db' ] } );
 	},
 	_initialize: function() {
 		this.addRunMethod( 'downloadManifest', this._downloadManifest.bind( this ), 'initializing', 4 );
@@ -32,7 +33,7 @@ module.exports = Base.extend({
 			return done();
 		}
 
-		this.download( manifest, tmpDir )
+		this.download( manifest, tmpDir, { adapterOpts: { progress: 'text' } } )
 			.then( done )
 			.catch( function( err ){
 				this.log( err.message );

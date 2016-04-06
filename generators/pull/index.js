@@ -1,7 +1,6 @@
-'use strict';
-var Base = require( '../../lib/base' );
+var _ = require( 'lodash' );
 var path = require( 'path' );
-var Promise = require( 'bluebird' );
+var Base = require( '../../lib/base' );
 
 module.exports = Base.extend({
 	pullMap: {
@@ -16,9 +15,14 @@ module.exports = Base.extend({
 		);
 	},
 	_doPull: function( done ) {
-		var pulls = this.arguments.map( this._getPull.bind( this ) );
+		var pulls = _.remove( this.arguments.map( this._getPull, this ) );
 
-		Promise.all( pulls ).then( done );
+		this.multiDownload( pulls )
+			.then( done )
+			//.catch( function( err ){
+			//	this.log( err.message );
+			//	process.exit( 0 );
+			//}.bind( this ));
 	},
 	_getPull: function( pull ) {
 		if ( this.pullMap[ pull ] ) {
@@ -27,35 +31,31 @@ module.exports = Base.extend({
 			return false;
 		}
 	},
-	_doDownload: function( def, dest ) {
-		var location, options;
-		if ( 'string' === typeof def ) {
-			location = def;
-			options = {};
-		} else if ( 'object' === typeof def ) {
-			location = def.location;
-			options = def.options;
-		}
-
-		if ( location && 'object' === typeof options ) {
-			return this.download( location, dest, options );
-		}
-	},
 	_getUploads: function() {
+		var uploads = false;
 		if ( this.install.uploads ) {
-			return this._doDownload(
-				this.install.uploads,
-				this.getAppPath( 'content-path')
-			);
+			if ( 'string' === typeof this.install.uploads ) {
+				uploads = { location: this.install.uploads };
+			} else {
+				uploads = _.clone( this.install.uploads );
+			}
+			uploads.dest = this.getAppPath( 'content-path', 'app', 'uploads' );
+			uploads.opts = uploads.opts || {};
+			uploads.opts.extract = { strip: 1 };
 		}
+		return uploads;
 	},
 	_getSQL: function() {
+		var database = false;
 		if ( this.install.database ) {
-			return this._doDownload(
-				this.install.database,
-				this.destinationPath( path.join( 'config', 'data' ) )
-			);
+			if ( 'string' ===  typeof this.install.database ) {
+				database = { location: this.install.database };
+			} else {
+				database = _.clone( this.install.database );
+			}
+			database.dest = path.join( 'config', 'data' );
 		}
+		return database;
 	},
 	allowRun: function(){}
 });
