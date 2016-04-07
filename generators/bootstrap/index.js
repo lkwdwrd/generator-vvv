@@ -73,7 +73,7 @@ module.exports = Base.extend({
 		}
 
 		projectPath = path.resolve( this.arguments[1] || path.join( this.options.vagrantPath, 'www', manifest.name ) );
-		if ( ! this._isPathInVVV( projectPath ) ) {
+		if ( ! this.isVVVPath( projectPath ) ) {
 			this.log( chalk.red.bold( 'That destination path is not in the VVV directory!' ) );
 			this.log( '' );
 			this.log( chalk.red( 'You might try...') );

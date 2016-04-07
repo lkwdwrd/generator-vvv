@@ -19,7 +19,7 @@ module.exports = Base.extend({
 		this.addRunMethod( '_checkLocationArg', this._checkLocationArg, 'initializing', 4 );
 	},
 	_checkLocationArg: function( done ) {
-		if ( ! this.arguments[0] || this._isPathInVVV( this.arguments[0] ) ) {
+		if ( ! this.arguments[0] || this.isVVVPath( this.arguments[0] ) ) {
 			return done();
 		} else {
 			this.log( chalk.red.bold( 'That destination path is not in the VVV directory!' ) );
