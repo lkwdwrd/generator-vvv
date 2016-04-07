@@ -19,10 +19,10 @@ module.exports = Base.extend({
 
 		this.multiDownload( pulls )
 			.then( done )
-			//.catch( function( err ){
-			//	this.log( err.message );
-			//	process.exit( 0 );
-			//}.bind( this ));
+			.catch( function( err ){
+				this.log( err.message );
+				process.exit( 0 );
+			}.bind( this ));
 	},
 	_getPull: function( pull ) {
 		if ( this.pullMap[ pull ] ) {
