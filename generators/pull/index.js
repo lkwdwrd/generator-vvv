@@ -17,6 +17,10 @@ module.exports = Base.extend({
 	_doPull: function( done ) {
 		var pulls = _.remove( this.arguments.map( this._getPull, this ) );
 
+		if ( 1 > pulls.length ) {
+			return done();
+		}
+
 		this.multiDownload( pulls )
 			.then( done )
 			.catch( function( err ){
