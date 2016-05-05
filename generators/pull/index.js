@@ -1,6 +1,7 @@
 var _ = require( 'lodash' );
 var path = require( 'path' );
 var Base = require( '../../lib/base' );
+var chalk = require( 'chalk' );
 
 module.exports = Base.extend({
 	pullMap: {
@@ -59,7 +60,17 @@ module.exports = Base.extend({
 			}
 			database.dest = path.join( 'config', 'data' );
 		}
+		if ( this.isRoot ) {
+			this.addRunMethod( 'import', this._import, 'install' );
+		}
 		return database;
+	},
+	_import: function( done ){
+		console.log();
+		console.log( chalk.yellow( 'Attempting to import your database.' ) );
+		console.log();
+		this.spawnCommandSync( 'grunt', [ 'import' ] );
+		done();
 	},
 	allowRun: function(){}
 });

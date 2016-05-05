@@ -131,7 +131,25 @@ module.exports = Base.extend({
 		}
 	},
 	install: function() {
+		if ( ! this.isRoot || this.options.skipInstall ) {
+			return;
+		}
+		this.log();
+		this.log(
+			chalk.yellow( 'Running ' ) +
+			chalk.yellow.bold( 'npm install' ) +
+			chalk.yellow( ' for you. If this fails, try running it yourself.' )
+		);
+		this.log();
 		this.spawnCommandSync( 'npm', [ 'install' ] );
+
+		this.log();
+		this.log(
+			chalk.yellow( 'Running ' ) +
+			chalk.yellow.bold( 'grunt' ) +
+			chalk.yellow( ' for you. If this fails, try running it yourself.' )
+		);
+		this.log();
 		this.spawnCommandSync( 'grunt' );
 	}
 });
