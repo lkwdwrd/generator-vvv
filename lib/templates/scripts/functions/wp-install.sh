@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Install this site via WP-ClI
 wp_install(){
   #Install as needed
   if [[ $WPCONST_MULTISITE ]] && ! $(wp --allow-root core is-installed --network > /dev/null 2>&1)

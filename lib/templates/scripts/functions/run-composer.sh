@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Run composer install or composer update depending on what's needed.
 run_composer(){
   #Run Composer
   if [ -f "composer.lock" ]

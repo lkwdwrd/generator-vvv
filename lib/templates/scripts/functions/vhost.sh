@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Add hosts entries to the internal VMs hosts file for this site.
 vhosts(){
   echo "Adding entry to the virtual machine's /etc/hosts file..."
   find $1 -maxdepth 5 -name 'vvv-hosts' | head -1 | \
@@ -14,6 +16,7 @@ vhosts(){
   done
 }
 
+# Remove a hosts entries to the internal VMs hosts file for this site.
 rm_vhosts(){
   echo "Cleaning entry from the virtual machine's /etc/hosts file..."
   find $1 -maxdepth 5 -name 'vvv-hosts' | head -1 | \

@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Run the build command, composer by default.
 build(){
   #Change directories
   local CURRENT=$PWD

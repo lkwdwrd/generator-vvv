@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Bootstrap this site.
 bootstrap(){
   echo "Bootstrapping $SITE_TITLE"
   link_executable

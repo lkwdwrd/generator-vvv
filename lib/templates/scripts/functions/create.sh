@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Bootstrap the site and run all needed creation tasks.
 create(){
   bootstrap
   nginx_conf $GVDIR

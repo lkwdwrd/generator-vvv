@@ -1,8 +1,11 @@
 #!/bin/bash
+
+# Restart Nginx.
 nginx_restart(){
   service nginx restart
 }
 
+# Copy over the Nginx configuration for this site.
 nginx_conf(){
   # Look for Nginx vhost files, copy them into the custom sites dir
   for SITE_CONFIG_FILE in $(find $1 -maxdepth 5 -name 'vvv-nginx.conf' | head -1); do
@@ -20,6 +23,7 @@ nginx_conf(){
   done
 }
 
+# Remove the Ningix configuration that was copied over for this site.
 rm_nginx_conf(){
   # Look for Nginx vhost files, remove them from the custom sites dir
   for SITE_CONFIG_FILE in $(find $1 -maxdepth 5 -name 'vvv-nginx.conf' | head -1); do

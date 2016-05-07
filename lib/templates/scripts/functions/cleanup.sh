@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Remove this install from Vagrant.
 cleanup(){
   db_bak
   rm_db

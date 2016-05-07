@@ -1,9 +1,12 @@
 #!/bin/bash
+
+# Create a database.
 db_create(){
   mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS $WPCONST_DB_NAME"
   mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON $WPCONST_DB_NAME.* TO $WPCONST_DB_USER@localhost IDENTIFIED BY '$WPCONST_DB_PASSWORD';"
 }
 
+# Import the first found SQL dump and update domains as needed.
 db_import(){
   #Find the first available SQL file in the config/data directory.
   FIRST_SQL=$(ls $GVDIR/config/data | grep -i -E '\.sql(.gz)?$' | head -1)
@@ -33,6 +36,7 @@ db_import(){
   fi
 }
 
+# Back up and gzip the current site's database.
 db_bak(){
   local BACKUP_FILE="$GVDIR/config/data/$WPCONST_DB_NAME"
   local BACKUP_EXT=".sql.gz"
@@ -47,6 +51,7 @@ db_bak(){
   echo "Backup Created."
 }
 
+# Remove this site's database entirely.
 rm_db(){
   echo "Removing database $WPCONST_DB_NAME."
   wp --allow-root db drop --yes
