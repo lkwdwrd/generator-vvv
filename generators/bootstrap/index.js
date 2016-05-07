@@ -131,7 +131,7 @@ module.exports = Base.extend({
 		}
 	},
 	install: function() {
-		if ( ! this.isRoot || this.options.skipInstall ) {
+		if ( this.options.skipInstall ) {
 			return;
 		}
 		this.log();
