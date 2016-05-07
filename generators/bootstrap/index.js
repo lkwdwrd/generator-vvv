@@ -34,6 +34,11 @@ var tmpDir = require( 'os' ).tmpdir();
 
 // Export the boostrap generator object.
 module.exports = Base.extend({
+	/**
+	 * The subgenerator description used in the main `yo:vvv` command.
+	 *
+	 * @type {String}
+	 */
 	description: 'Turn an existing wpmanifest.json into a usable site.',
 	/**
 	 * Compose boostrap with the dump, dump-task, and pull subgenerators.

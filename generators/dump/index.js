@@ -1,4 +1,38 @@
+/**
+ * Outputs various types of files tht require templating or processing.
+ *
+ * This file reads in the manifest declaration and then allows outputting of
+ * the following files
+ *
+ * - manifest (wpmanifest.json)
+ * - composer (composer.json, both in the root and the app if applicable)
+ * - env (.env, and .env.example)
+ * - domains (vvv-hosts, nginx configs, wp-cli yaml)
+ * - wp-cli (the wp-cli yaml file)
+ * - package (package.json)
+ * - nginx-config (vvv-nginx.conf, proxy.conf, rewrites.conf)
+ *
+ * You can also pass 'all' as a dump argument and all of these files will be
+ * output into the install location.
+ *
+ * ```
+ * yo vvv:dump <options> <args>
+ * ```
+ *
+ * The space separated args are used to dump whatever files you would like in
+ * one call to dump. Any of the above strings can be used to dump out the
+ * associated files. For instance: `yo vvv:dump composer env` will output both
+ * the composer files and the .env files.
+ *
+ * Dump is very useful when you make a small update to your manifest and need to
+ * reprocess it and update a file. For example, after modifying the composer
+ * key of the manifest file, you will likely want to dump composer so that the
+ * chages are propagated out to the actual composer.json files.
+ */
+
 'use strict';
+
+// Require dependencies.
 var Base = require( '../../lib/base' );
 var _ = require( 'lodash' );
 var path = require( 'path' );
@@ -7,8 +41,19 @@ var envParse = require( 'dotenv' ).parse;
 var crypto = require( 'crypto' );
 var chalk = require( 'chalk' );
 
-
+// Export the dump generator.
 module.exports = Base.extend({
+	/**
+	 * The subgenerator description used in the main `yo:vvv` command.
+	 *
+	 * @type {String}
+	 */
+	desc: 'Output files based on the manifest.json values.',
+	/**
+	 * Maps command line arguments to processing methods for each dump type.
+	 *
+	 * @type {Object}
+	 */
 	dumpMap: {
 		'manifest': '_dumpManifest',
 		'composer': '_dumpComposer',
@@ -18,9 +63,20 @@ module.exports = Base.extend({
 		'package': '_dumpPackage',
 		'nginx-config': '_dumpNginxConfig'
 	},
+	/**
+	 * Set up run-methods to trigger during the yeoman lifecycle.
+	 *
+	 * @return {void}
+	 */
 	_initialize: function() {
 		this.arguments.forEach( this._processDump.bind( this ) );
 	},
+	/**
+	 * If an argument matches the dump map, add it to the yeoman lifecycle
+	 *
+	 * @param  {String} dump The specific dump to perform.
+	 * @return {void}
+	 */
 	_processDump: function ( dump ) {
 		if ( this.dumpMap[ dump ] ) {
 			this.addRunMethod(
@@ -33,9 +89,21 @@ module.exports = Base.extend({
 			_.keys( this.dumpMap ).forEach( this._processDump.bind( this ) );
 		}
 	},
+	/**
+	 * Writes the `manifest.json` file.
+	 *
+	 * This dump is primarily useful for the 'json' and 'create' subgenerators.
+	 *
+	 * @return {void}
+	 */
 	_dumpManifest: function() {
 		this.writeJSON( _.omit( this.install, [ 'workingDirectory' ] ), 'wpmanifest.json' );
 	},
+	/**
+	 * Output the `composer.json` files as defined by the manifest.
+	 *
+	 * @return {void}
+	 */
 	_dumpComposer: function() {
 		// Localize vars.
 		var composer;
@@ -61,6 +129,13 @@ module.exports = Base.extend({
 			this._dumpComposerApp( composer, this.appPaths );
 		}
 	},
+	/**
+	 * Dump out the app version of the `composer.json` when needed.
+	 *
+	 * @param  {Object} composer The root level composer object.
+	 * @param  {Object} paths    The app-paths object.
+	 * @return {void}
+	 */
 	_dumpComposerApp: function( composer, paths ) {
 		var i, length, sourcesWhitlist = [ 'plugin', 'theme', 'muplugin' ];
 
@@ -92,6 +167,18 @@ module.exports = Base.extend({
 			path.join( 'app', paths['composer-path'], 'composer.json' )
 		);
 	},
+	/**
+	 * Set up the correct paths for `composer.json` based on the manifest.
+	 *
+	 * This is what allows the definition in the `wpmanifest.json` file to
+	 * output multiple `composer.json` files that send dependencies to the same
+	 * locations despite being in different locations themselves.
+	 *
+	 * @param  {Object} paths        The app-paths object.
+	 * @param  {String} root         The app root file paths for `composer.json`
+	 * @param  {String} composerPath The path where for this `composer.json`.
+	 * @return {Object}              Normalized composer path definitions.
+	 */
 	_processComposerPaths: function( paths, root, composerPath ) {
 		root = root || '.';
 		composerPath = composerPath || paths['composer-path'];
@@ -115,6 +202,16 @@ module.exports = Base.extend({
 
 		return composerPaths;
 	},
+	/**
+	 * Output .env and .env.example files.
+	 *
+	 * This will automatically generate random salts to use in the WP install.
+	 * However if salts have already been generated, they will be read and
+	 * reuse the defined salts so that they do not constantly change every time
+	 * the environment file is refreshed.
+	 *
+	 * @return {void}
+	 */
 	_dumpEnv: function() {
 		// Localize vars
 		var env, envExample, basicItems, defaultConstants, salts,
@@ -159,12 +256,32 @@ module.exports = Base.extend({
 		this.fs.write( path.join( envPath, '.env' ), this._envToString( env ) );
 		this.fs.write( path.join( envPath, '.env.example' ), this._envToString( envExample ) );
 	},
+	/**
+	 * Converts an object of environment vairables into and evironment string.
+	 *
+	 * @param  {Object} envObj A object of env variable key/val pairs.
+	 * @return {String}        An evironment string to save to a file.
+	 */
 	_envToString: function ( envObj ) {
 		return _.map( envObj, function ( item, key ) {
 			item = ( 'true' === '' + item || 'false' === '' + item ) ? item : '"' + item + '"';
 			return key + '=' + item;
 		} ).join( "\n" );
 	},
+	/**
+	 * Generate WP salt keys as needed.
+	 *
+	 * If salts already exist, then they will be read and reused, otherwise
+	 * randomized strings will be used for the main .env function using the
+	 * passed `genFunc` or by default a random base64 string. If a string is
+	 * passed as the genFunc, it's value will be returned for all salts.
+	 *
+	 * @param  {Object}          envObj  Environment key/value pairs.
+	 * @param  {Function|String} genFunc A function to generate vals, or a
+	 *                                   static string to use for all salts.
+	 * @return {Object}                  Environment key/value pairs with the
+	 *                                   needed salts added.
+	 */
 	_generateSalts: function ( envObj, genFunc ) {
 		var keys = [
 			'WPCONST_AUTH_KEY',
@@ -190,6 +307,11 @@ module.exports = Base.extend({
 			return envObj[ key ] || genFunc( key );
 		} ) );
 	},
+	/**
+	 * Dumps all files associated with the domains defined by the manifest.
+	 *
+	 * @return {void}
+	 */
 	_dumpDomains: function() {
 		// Make sure CLI gets porcessed as well.
 		this._processDump( 'wp-cli' );
@@ -200,6 +322,11 @@ module.exports = Base.extend({
 			domains: this._getDomains().join( "\n" )
 		} );
 	},
+	/**
+	 * Processes the domains defined in the manifest into an array of domains.
+	 *
+	 * @return {Array} An array of full domain strings.
+	 */
 	_getDomains: function() {
 		// process out an array of local domains.
 		return [ this.install.server.local ].concat(
@@ -207,10 +334,21 @@ module.exports = Base.extend({
 			.map( _mapSubs, this )
 		);
 
+		/**
+		 * Turns a subdomain string into a full domain string.
+		 *
+		 * @param  {String} sub The subdomain to create.
+		 * @return {String}     The full domain string for the subdomain.
+		 */
 		function _mapSubs( sub ) {
 			return sub + '.' + this.install.server.local;
 		}
 	},
+	/**
+	 * Dumps out all necessary Nginx configuration files.
+	 *
+	 * @return {void}
+	 */
 	_dumpNginxConfig: function() {
 		var rewriteBase = path.relative( this.getAppPath( 'root' ), this.getAppPath( 'wp-path' ) ),
 		templateVars = {
@@ -249,12 +387,26 @@ module.exports = Base.extend({
 			this.fs.delete( this.destinationPath( path.join( 'config', 'proxy.conf' ) ) );
 		}
 	},
+	/**
+	 * Turns a proxy definition into a usable nginx configuration string.
+	 *
+	 * @param  {Object} proxies     A set of prozy definitions.
+	 * @param  {String} fallbackURL The fallback URL for the proxies.
+	 * @return {Array}              Normalized proxies for templating.
+	 */
 	_normalizeProxies: function( proxies, fallbackURL ) {
 		proxies = _.clone( proxies );
 		fallbackURL = ( fallbackURL ) ? 'https://' + fallbackURL : false;
 
 		return _.mapValues( proxies, _.curry( _singleProxyNormalize )( _, fallbackURL ) );
 
+		/**
+		 * Normalizes a single proxy declaration for use in templating.
+		 *
+		 * @param  {Object} proxy       A singular poxy definition.
+		 * @param  {String} fallbackURL The fallback URL to proxy to.
+		 * @return {Object}             The normalized proxy object.
+		 */
 		function _singleProxyNormalize( proxy, fallbackURL ) {
 			var types, typesExclude, normalized = {},
 				defaultTypes = [
@@ -304,6 +456,13 @@ module.exports = Base.extend({
 
 			return normalized;
 
+			/**
+			 * Normalize the proxy locations for a single proxy declaration.
+			 *
+			 * @param  {mixed}  location    Either a location string or object.
+			 * @param  {String} fallbackURL The fallback URL for this proxy.
+			 * @return {Object}             A normalized proxy location object.
+			 */
 			function normalizeLocations( location, fallbackURL ) {
 				if ( 'string' === typeof location ) {
 					location = {
@@ -322,6 +481,11 @@ module.exports = Base.extend({
 			}
 		}
 	},
+	/**
+	 * Dump out a WP-ClI Yaml file for install commands and root accessiblity.
+	 *
+	 * @return {void}
+	 */
 	_dumpWPCLI: function() {
 		// Compile basic data.
 		var data = {
@@ -338,6 +502,11 @@ module.exports = Base.extend({
 		// Dump the wp-cli.yml file.
 		this.globalTemplate( '_wp-cli.yml', 'wp-cli.yml', data );
 	},
+	/**
+	 * Output a NPM package.json file to ensure grunt is properly configured.
+	 *
+	 * @return {void}
+	 */
 	_dumpPackage: function() {
 		this.writeJSON( {
 			name: this.install.site.constants.DB_NAME,
@@ -360,5 +529,10 @@ module.exports = Base.extend({
 			}
 		}, 'package.json' );
 	},
+	/**
+	 * A noop to trick Yeoman into running this generator with 'no methods'.
+	 *
+	 * @return {void}
+	 */
 	allowRun: function(){}
 });

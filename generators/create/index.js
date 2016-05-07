@@ -14,6 +14,11 @@ var chalk = require( 'chalk' );
 
 
 module.exports = Base.extend({
+	/**
+	 * The subgenerator description used in the main `yo:vvv` command.
+	 *
+	 * @type {String}
+	 */
 	description: 'Define a site and immediately bootstrap it.',
 	/**
 	 * Compose the json, source, require, and bootstrap subgenerators.

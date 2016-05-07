@@ -62,7 +62,7 @@ module.exports = yeoman.Base.extend({
 		return { name: opt, value: name };
 	},
 	/**
-	 * A noop since to trick Yeoman into running this generator with no methods.
+	 * A noop to trick Yeoman into running this generator with 'no methods'.
 	 *
 	 * @return {void}
 	 */
