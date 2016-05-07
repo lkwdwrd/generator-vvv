@@ -61,7 +61,11 @@ module.exports = Base.extend({
 			database.dest = path.join( 'config', 'data' );
 		}
 		if ( this.isRoot ) {
-			this.addRunMethod( 'import', this._import, 'install' );
+			this.env.runLoop.add(
+				'install',
+				this._import.bind( this ),
+				{ once: 'import', run: false }
+			);
 		}
 		return database;
 	},
