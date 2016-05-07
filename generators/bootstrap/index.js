@@ -34,6 +34,7 @@ var tmpDir = require( 'os' ).tmpdir();
 
 // Export the boostrap generator object.
 module.exports = Base.extend({
+	description: 'Turn an existing wpmanifest.json into a usable site.',
 	/**
 	 * Compose boostrap with the dump, dump-task, and pull subgenerators.
 	 *
