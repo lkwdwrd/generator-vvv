@@ -4,6 +4,8 @@
  - [Title](#title) *(str)* __*__
  - [Description](#description) *(str)*
  - [Homepage](#homepage) *(str)*
+ - [Database](#database) *(str)*
+ - [Uploads](#uploads) *(str)*
  - [Site](#site) *(obj)* __*__
 	 - [Prefix](#prefix) *(str)*
 	 - [Base](#base) *(str)*
@@ -55,6 +57,14 @@
 ## Homepage
 
 *(string)* The site where you can learn more about the project. This could be anything from a repository with a good README file to a documentation site, to a basecamp project URL. This is the same as [Composer JSON homepage](https://getcomposer.org/doc/04-schema.md#homepage) and is output as the homepage for the `composer.json` files when dumped.
+
+## Database
+
+*(string|object)* This is either a URL to where a database dump can be downloaded, or it is a download definition object based on [MC Download's](https://github.com/lkwdwrd/mc-download) multi-download method. MC Download supports scp access to files on a server so if you don't want your site's database dumps available to the world, hide them on a private area of your server and download them via SCP.
+
+## Uploads
+
+*(string|object)* While image proxies are great and can help keep your local machine's storage under control, sometimes you need to bring down the assets locally. After creating an archive of your uploads folder (.zip, .tar.gz, etc) you can point to it in the uploads key. This is either a URL to where a archive can be downloaded, or it is a download definition object based on [MC Download's](https://github.com/lkwdwrd/mc-download) multi-download method. MC Download supports scp access to files on a server so if you don't want your site's uploads available to the world, hide them on a private area of your server and download them via SCP.
 
 ## Site
 

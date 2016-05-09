@@ -61,6 +61,16 @@ This command reprocesses the `wpmanifest.json` file of the selected install and 
  - **copy** - Dumps the copy task.
  - **all** - Dumps everything available to be dumped with the dump-task command.
 
+### vvv:pull
+```
+$ yo vvv:pull [items...]
+```
+
+This will download the site's database and/or uploads archive according to the ['database'](manifest-schema.md#database) and ['uploads'](manifest-schema.md#uploads) definitions in the `wpmanifest.json` file for the selected install. The upload archive is extracted into the correct location and **will overwrite any existing uploads files** that are there. The database will be imported and **will replace the existing database for the site**. URLs will have find-replace run on them based on the ['server.local'](manifest-schema.md#local) and ['server.remote'](manifest-schema.md#remote) defintions.
+
+ - **db** - Downloads and imports the database.
+ - **uploads** -  Downloads and extracts an uploads archive.
+
 ### vvv:require
 ```
 $ yo vvv:require
@@ -73,6 +83,15 @@ $ yo vvv:source
 ```
 
 Runs through a looped set of questions to add sources to an existing project. Once complete, these are recorded in the `wpmanifest.json` file. It then dumps the source tasks and runs grunt to clone down and symlink the new files in place.
+
+### vvv:config
+```
+$ yo vvv:config operation [config-key] [config-value] .. \<flags\>
+```
+
+This command allows you to get, set, and delete configuration values in the `.gvrc` file that persists things such as the vagrant-path. You can get all of the stored values (global and local) with `yo vvv:config get all`. You can use the `--global` or `-g` flag to work only with the global `.gvrc` file stored in your user folder. For instance to update where the generator looks for Vagrant you can run `yo vvv:config set vagrant-path /new/path/to/vagrant/install/ -g`. You can also completely delete the value from the global config and allow it to be reconfigured the nest time the generator is run with `yo vvv:config delete vagrant-path`.
+
+When downloading files using the 'scp' download type, the generator will look for objects in your rc configuration at `scp` and `scp-installName` if working on a specific install that is known to the generator. You can set nested values using object notation. For instance to set a persistent username for downloads on the lkwdwrd install, I could run `yo vvv:config set scp-lkwdwrd.user lkwdwrd`.
 
 ### Global Options
 
