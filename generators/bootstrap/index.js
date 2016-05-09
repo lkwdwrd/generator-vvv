@@ -216,7 +216,7 @@ module.exports = Base.extend({
 	/**
 	 * Run npm install followed by Grunt, alerting the user it is occuring.
 	 *
-	 * The options `--skip-install` can be passed to suppress this from running.
+	 * The option `--skip-install` can be passed to suppress this from running.
 	 *
 	 * @return {void}
 	 */
