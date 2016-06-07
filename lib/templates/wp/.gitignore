@@ -1,0 +1,5 @@
+<%= contentPath %>/
+<%= vendorDir %>/
+<%= wpPath %>/
+.env
+composer.lock

@@ -1,0 +1,18 @@
+path: <%= path %>
+url: <%= url %>
+core install:
+	url: <%= url %>
+	title: <%= title %>
+	admin_user: <%= user %>
+	admin_password: <%= pass %>
+	admin_email: <%= email %>
+	skip-email: true
+core multisite-install:
+	url: <%= url %>
+	title: <%= title %>
+	admin_user: <%= user %>
+	admin_password: <%= pass %>
+	admin_email: <%= email %>
+	base: <%= base %>
+	subdomains: <%= subdomains %>
+	skip-email: true
