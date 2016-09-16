@@ -62,7 +62,6 @@ module.exports = Base.extend({
 	_initialize: function() {
 		this.addRunMethod( 'downloadManifest', this._downloadManifest.bind( this ), 'initializing', 4 );
 		this.addRunMethod( 'processManifest', this._processManifest.bind( this ), 'initializing', 4 );
-		this.addRunMethod( 'getUploads', this._getUploads.bind( this ), 'configuring' );
 		this.removeRunMethod( 'dump:manifest', 'writing' );
 	},
 	/**
