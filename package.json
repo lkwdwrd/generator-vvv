@@ -16,7 +16,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "files": [],
   "keywords": [
     "yeoman-generator",
     "vvv",
